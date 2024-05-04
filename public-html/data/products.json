@@ -1,0 +1,103 @@
+[
+  {
+    "art_num": 1,
+    "name": "T-Red",
+    "group":"Männer,Frauen,Unisex",
+    "price": 19.99,
+    "size":"S,M,L,XL,XXL",
+    "color": "Rot",
+    "category":"Tshirt",
+    "image_url": "https://cdn.pixabay.com/photo/2016/12/06/09/31/blank-1886008_1280.png"
+  },
+  {
+    "art_num": 2,
+    "name": "Braune Herrenjacke",
+    "group":"Männer",
+    "price": 79.99,
+    "size":"M,L,XL,XXL",
+    "color": "Braun",
+    "category":"Jacke",
+    "image_url": "https://cdn.pixabay.com/photo/2017/09/07/04/54/khaki-2723896_1280.jpg"
+  },
+  {
+    "art_num": 3,
+    "name": "Brilliantenarmband",
+    "group":"Frauen",
+    "price": 29.99,
+    "size":"S,M,L",
+    "color": "Silber",
+    "category":"Accessoires",
+    "image_url": "  https://cdn.pixabay.com/photo/2016/11/11/17/34/diamond-1817291_1280.png"
+  },
+  {
+    "art_num": 4,
+    "name": "Monkey Basketball shorts mens",
+    "group":"Männer" ,
+    "price": 19.99,
+    "size": "S,M,L,XL,XXL", 
+    "color": "Grün,Violett",
+    "category":"Hosen",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+  },
+
+  {
+    "art_num": 5,
+    "name": "Zen Socken",
+    "group":"Männer,Frauen,Unisex",
+    "price": 12.99,
+    "size":"one-size",
+    "color": "Violett,Grün,Orange",
+    "category": "Accessories",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+  },
+  {
+    "art_num": 6,
+    "name": "Monkeys Polo ",
+    "group":"Männer",
+    "price": 21.99,
+    "size":"S,M,L,XL,XXL",
+    "color": "Orange,Schwarz",
+    "category":"Tshirt",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+  },
+  {
+    "art_num": 7,
+    "name": "T-Shirt Striped",
+    "group":"Männer,Frauen,Unisex",
+    "price": 39.99,
+    "size":"S,M,L,XL,XXL",
+    "color": "Schwarz-Weiß,Rot-Blau",
+    "category":"Tshirt",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+  },
+   {
+    "art_num": 8,
+    "name": "Baggy Jeans",
+    "group":"Männer",
+    "price": 79.99,
+    "size":"M,L,XL,XXL",
+    "color": "Black,Gray",
+    "category":"Hose",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+  },
+   {
+    "art_num": 9,
+    "name": "Hoodie mit Aufdruck",
+    "group":"Männer,Frauen,Unisex",
+    "price": 99.99,
+    "size":"L,XL,XXL,3XL",
+    "color": "Schwarz,Grau,Dunkelblau",
+    "category":"Hoodie",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+  },
+   {
+    "art_num": 10,
+    "name": "Anzug",
+    "group":"Männer",
+    "price": 239.99,
+    "size":"M,L,XL",
+    "color": "Schwarz,Blau,Grau",
+    "category":"Anzug",
+    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+  }
+]
