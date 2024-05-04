@@ -1,9 +1,9 @@
-# Sprinplan für ZenMonkey
+# Sprintplan für ZenMonkey
 > # Legende:<br>
 >>Gruppe -> Die ganze Gruppe hat sich bereit erklärt diese Aufgabe zu bearbeiten<br>
->>A -> Rafin Ifta Alam hat sich bereit erklärt die Aufgabe zu bearbeiten<br>
->>H -> Lukas Huber hat sich bereit erklärt die Aufgabe zu bearbeiten<br>
->>D -> Dominik Pierdiluca hat sich bereit erklärt die Aufgabe zu bearbeiten
+>>A -> Rafin Ifta Alam hat sich bereit erklärt diese Aufgabe zu bearbeiten<br>
+>>H -> Lukas Huber hat sich bereit erklärt diese Aufgabe zu bearbeiten<br>
+>>D -> Dominik Pierdiluca hat sich bereit erklärt diese Aufgabe zu bearbeiten
 > ___
 
 
