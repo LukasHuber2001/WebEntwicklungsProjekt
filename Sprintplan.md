@@ -25,7 +25,7 @@
 ### III. Webserver
 #### HTML-Seiten erstellen:
 - Index.html:
-    - R: Erstellung der Index.html-Seite mit der Auflistung der Produkte aus der JSON-Datei.
+    - D: Erstellung der index.html-Seite mit der Auflistung der Produkte aus der JSON-Datei.
 - Impressum.html:
     - R: Erstellung der Impressum.html-Seite.
 - Design:
