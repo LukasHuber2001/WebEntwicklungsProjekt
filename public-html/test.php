@@ -1,5 +1,5 @@
 <?php
-
+# need to run the command "docker-php-ext-install mysqli" in the php:apache container in order for the mysqli functions to work.
 echo "Hello World";
 
 $connect = mysqli_connect(
