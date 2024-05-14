@@ -28,15 +28,15 @@ function displayProducts(products) {
 
         // Erstelle eine Card für jedes Produkt
         const card = $(`
-            <div class="col-md-4">
+            <div class="col-md-4 d-flex align-items-stretch">
                 <div class="card mb-4">
-                    <img src="${product.image_url}" class="card-img-top" alt="${product.name}">
-                    <div class="card-body">
-                        <h5 class="card-title">${product.name}</h5>
-                        <p class="card-text">Preis: €${product.price.toFixed(2)}</p>
-                        <p class="card-text">Größe: ${product.size}</p>
-                        <p class="card-text">Farbe: ${product.color}</p>
-                        <button class="btn btn-primary add-to-cart-btn" data-product='${JSON.stringify(product)}'>In den Warenkorb legen</button>
+                    <img style="height:300px; width: 350px" src="${product.image_url}" class="card-img-top" alt="${product.name}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mt-auto">${product.name}</h5>
+                        <p class="card-text mt-auto">Preis: €${product.price.toFixed(2)}</p>
+                        <p class="card-text mt-auto">Größe: ${product.size}</p>
+                        <p class="card-text mt-auto">Farbe: ${product.color}</p>
+                        <button class="btn btn-primary add-to-cart-btn mt-auto" data-product='${JSON.stringify(product)}'>In den Warenkorb legen</button>
                     </div>
                 </div>
             </div>
