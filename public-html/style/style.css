@@ -1,0 +1,76 @@
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Ensure it's above other content */
+}
+
+body {
+    padding-top: 56px; /* Adjust this value to match the height of your navbar */
+}
+
+
+.search-container {
+    position: relative;
+}
+
+.search-icon, .clear-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 2; /* Ensure icons are above the input field*/
+}
+
+.search-icon {
+    left: 10px;
+}
+
+.clear-icon {
+    right: 10px;
+}
+
+#search-input {
+    padding-left: 30px;
+    padding-right: 30px;
+    z-index: 1; /* Ensure input fieldis below icons */
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    background-color: #f8f9fa; /* Light grey background */
+    padding: 10px; /* Add padding to separate fields */
+    border-radius: 5px; /* Add rounded corners */
+}
+
+.cart-item span {
+    flex: 1;
+}
+
+.cart-item input {
+    width: 50px; /* Smaller input field for quantity */
+    margin-right: 10px; /* Add some space between input and total price */
+    background-color: white; /* White background for input field */
+    border: 1px solid #ced4da; /* Grey border */
+    border-radius: 3px; /* Add rounded corners */
+    padding: 5px; /* Add padding inside input field */
+}
+
+.cart-item .delete-btn {
+    margin-left: 10px; /* Add some space between total price and delete button */
+    background-color: #dc3545; /* Red background for delete button */
+    color: white; /* White text color */
+    border: none; /* Remove border */
+    padding: 5px 10px; /* Add padding to button */
+    border-radius: 3px; /* Add rounded corners */
+    cursor: pointer; /* Add cursor pointer */
+    transition: background-color 0.3s; /* Smooth transition on hover */
+}
+
+.cart-item .delete-btn:hover {
+    background-color: #c82333; /* Darker red background on hover */
+}

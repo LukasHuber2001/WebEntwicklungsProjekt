@@ -1,64 +1,106 @@
-// Globaler Warenkorb
-const cart = [];
+//functions that are being loaded on siteload
+$(document).ready(function() {
+    //load products from the json file
+    loadProducts();
+    
+    // search input listener, activates upon each input to make the search happen in real time
+    $('#search-input').on('input', function() {
+        const query = $(this).val();
+        liveSearch(query);
+    });
+    // clear search input
+    $('#clear-icon').on('click', function() {
+        $('#search-input').val('');
+        liveSearch('');
+        $('#clear-icon').hide();
+    });
+})
 
-// Funktion zum Laden der Produkte aus der JSON-Datei
-function loadProducts() {
-    $.getJSON('../data/products.json', function(data) {
-        // Produkte in der HTML-Seite anzeigen
-        displayProducts(data);
+//live search function, makes a new variable with all found json data and sends this json data to the displayProducts function
+function liveSearch(query) {
+    $.ajax({
+        url: '../logic/requestHandler.php',
+        type: 'GET',
+        data: { method: "searchProducts", query: query },
+        success: function(data) {
+            const products = JSON.parse(data);
+            displayProducts(products);
+            if (products.length === 0) {
+                $('#no-products-text').show(); //shows the no products found text
+            } else {
+                $('#no-products-text').hide(); //hides the no products found text
+            }
+            $('#clear-icon').toggle(query.length > 0);
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
     });
 }
 
-// Funktion zum Anzeigen der Produkte
+
+const cart = [];
+
+//gets json data of each product
+function loadProducts() {
+    $.getJSON('../data/products.json', function(data) {
+        // displays the products loaded
+        displayProducts(data);
+        console.log("Products loaded, yayaaaah!");
+    });
+}
+
+// display the products, uses html to load the products into cards, adds purchase button    
 function displayProducts(products) {
     const productContainer = $('#product-container');
     productContainer.empty();
 
     let row = null;
     products.forEach((product, index) => {
-        // Wenn der Index durch 3 teilbar ist, beginnen wir eine neue Reihe
+        //starts a new row every 3 products iterated, so the first product enters this query, then the fourth, then the seventh and so on
         if (index % 3 === 0) {
             if (row !== null) {
-                // Wenn wir eine vorherige Reihe haben, fügen wir sie dem Container hinzu
+                // adds the finished row to the product container, actually only happens after the first row has been completed
                 productContainer.append(row);
             }
-            // Eine neue Reihe starten
+            // starts a new row
             row = $('<div class="row mb-4"></div>');
         }
 
-        // Erstelle eine Card für jedes Produkt
+        //create the cards with html
         const card = $(`
             <div class="col-md-4 d-flex align-items-stretch">
                 <div class="card mb-4">
                     <img style="height:300px; width: 350px" src="${product.image_url}" class="card-img-top" alt="${product.name}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title mt-auto">${product.name}</h5>
-                        <p class="card-text mt-auto">Preis: €${product.price.toFixed(2)}</p>
-                        <p class="card-text mt-auto">Größe: ${product.size}</p>
-                        <p class="card-text mt-auto">Farbe: ${product.color}</p>
-                        <button class="btn btn-primary add-to-cart-btn mt-auto" data-product='${JSON.stringify(product)}'>In den Warenkorb legen</button>
+                        <p class="card-text mt-auto">Price: €${product.price.toFixed(2)}</p>
+                        <p class="card-text mt-auto">Size: ${product.size}</p>
+                        <p class="card-text mt-auto">Color: ${product.color}</p>
+                        <button class="btn btn-primary add-to-cart-btn mt-auto" data-product='${JSON.stringify(product)}'>Add To Cart</button>
                     </div>
                 </div>
             </div>
         `);
 
-        // Die Karte der aktuellen Reihe hinzufügen
+        // add the card to the row
         row.append(card);
     });
 
-    // Die letzte Reihe dem Container hinzufügen, falls es eine gibt
+    //if the system exited the function without appending the last row, it will be appended here
+    //if the last row of products could not be properly finished because there are less then three products, we need to finish it here
     if (row !== null) {
         productContainer.append(row);
     }
 
-    // Füge Ereignis-Listener für den Warenkorb-Button hinzu
+    // function for add to card button, defines constant that saves the products in the cart and starts the addToCard function
     $('.add-to-cart-btn').on('click', function() {
         const product = JSON.parse($(this).attr('data-product'));
         addToCart(product);
     });
 }
 
-// Funktion zum Hinzufügen eines Produkts in den Warenkorb
+// function to add new products to card, checks if the product was already added or not, adds product or quantity
 function addToCart(product) {
     const existingProduct = cart.find(item => item.art_num === product.art_num);
 
@@ -71,7 +113,7 @@ function addToCart(product) {
     updateCartDisplay();
 }
 
-// Funktion zum Anzeigen des Warenkorbs
+// update cart, empties items each load, calculates total price, and displays products
 function updateCartDisplay() {
     const cartItems = $('#cart-items');
     cartItems.empty();
@@ -82,11 +124,11 @@ function updateCartDisplay() {
         const itemTotalPrice = item.price * item.quantity;
         totalPrice += itemTotalPrice;
 
-        // Erstelle die Listenelemente für jedes Produkt im Warenkorb
+        // use html to create a list for each cart item, adds input field to change quantity and trash bin button to delete item off of cart
         const cartItem = $(`
             <li class="cart-item">
                 <span>${item.name}</span>
-                <span>Preis: €${itemTotalPrice.toFixed(2)}</span>
+                <span>Price: €${itemTotalPrice.toFixed(2)}</span>
                 <input type="number" class="form-control quantity-input" value="${item.quantity}" min="1" data-art-num="${item.art_num}">
                 <button class="btn btn-danger delete-btn" data-art-num="${item.art_num}"><i class="fas fa-trash"></i></button>
             </li>
@@ -94,18 +136,18 @@ function updateCartDisplay() {
         cartItems.append(cartItem);
     });
 
-    // Gesamtpreis aktualisieren
+    // update total price
     $('#total-price').text(`€${totalPrice.toFixed(2)}`);
 
-    // Ereignis-Listener für Mengeingaben und Löschen-Buttons hinzufügen
+    // simple event listener for quantity input and delete button
     $('.quantity-input').on('change', updateQuantity);
     $('.delete-btn').on('click', deleteCartItem);
 
-    // Warenkorb-Anzahl in der Navbar aktualisieren
+    // updates the counter for the cart icon in the navbar
     $('#cart-count').text(cart.length);
 }
 
-// Funktion zum Aktualisieren der Menge eines Produkts im Warenkorb
+// handles the quantity fields
 function updateQuantity(event) {
     const artNum = parseInt($(event.target).data('art-num'));
     const newQuantity = parseInt($(event.target).val());
@@ -118,7 +160,7 @@ function updateQuantity(event) {
     updateCartDisplay();
 }
 
-// Funktion zum Löschen eines Produkts aus dem Warenkorb
+// deletes prduct off of cart
 function deleteCartItem(event) {
     const artNum = parseInt($(event.target).data('art-num'));
 
@@ -129,8 +171,3 @@ function deleteCartItem(event) {
 
     updateCartDisplay();
 }
-
-// Laden der Produkte beim Start der Seite
-$(document).ready(function() {
-    loadProducts();
-});

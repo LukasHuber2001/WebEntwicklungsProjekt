@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zen Monkeys</title>
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome for icons -->
+    <!-- Font Awesome for the icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <!-- Custom CSS -->
+    <!-- stylesheet -->
     <link rel="stylesheet" href="../style/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -22,6 +22,17 @@
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="#">Zen Monkeys</a>
+    <div class="search-container">
+        <div class="input-group">
+            <span id="search-icon" class="input-group-prepend search-icon">
+                <i class="fas fa-search"></i>
+            </span>
+            <input type="text" id="search-input" class="form-control" placeholder="Search products...">
+            <span id="clear-icon" class="input-group-append clear-icon" style="display: none;">
+                <i class="fas fa-times"></i>
+            </span>
+        </div>
+    </div>
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
@@ -36,29 +47,34 @@
 
 <!-- Main content: Cards -->
 <div class="container mt-4" id="product-container">
-    <!-- Die Produktkarten werden hier eingefügt -->
+    <!-- Product cards will be added here -->
 </div>
 
-<!-- Modal: Warenkorb -->
+<!-- Text: no Products found, display text when no matching products have been found -->
+<div id="no-products-text" class="text-center mt-4" style="display: none;">
+    Nothing here but us monkeys..
+</div>
+
+<!-- shopping cart -->
 <div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-labelledby="cart-modal-label" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cart-modal-label">Warenkorb</h5>
+                <h5 class="modal-title" id="cart-modal-label">Shopping Cart</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <ul id="cart-items">
-                    <!-- Hier werden die Warenkorb-Artikel aufgelistet -->
+                    <!-- list cart items -->
                 </ul>
                 <div class="total">
-                    <strong>Gesamt:</strong> <span id="total-price">€0.00</span>
+                    <strong>Total:</strong> <span id="total-price">€0.00</span>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" id="checkout-button">Weiter zum Zahlen</button>
+                <button class="btn btn-primary" id="checkout-button">Checkout</button>
             </div>
         </div>
     </div>
