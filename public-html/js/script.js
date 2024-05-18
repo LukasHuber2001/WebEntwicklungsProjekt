@@ -14,9 +14,22 @@ $(document).ready(function() {
         liveSearch('');
         $('#clear-icon').hide();
     });
-})
 
-//live search function, makes a new variable with all found json data and sends this json data to the displayProducts function
+    //sort change listener
+    $('#sort-dropdown').on('change', function() {
+        const query = $('#search-input').val();
+        liveSearch(query);
+    });
+});
+
+//function to count the found products to display on index.html
+function productCounter(products) {
+    const productCount = products.length;
+    $('#product-count').text(`${productCount === 1 ? '1 product' : `${productCount} products`} found`);
+    $('#no-products-text').toggle(productCount === 0);
+}
+
+
 function liveSearch(query) {
     $.ajax({
         url: '../logic/requestHandler.php',
@@ -24,12 +37,8 @@ function liveSearch(query) {
         data: { method: "searchProducts", query: query },
         success: function(data) {
             const products = JSON.parse(data);
+            sortProducts(products);
             displayProducts(products);
-            if (products.length === 0) {
-                $('#no-products-text').show(); //shows the no products found text
-            } else {
-                $('#no-products-text').hide(); //hides the no products found text
-            }
             $('#clear-icon').toggle(query.length > 0);
         },
         error: function(xhr, status, error) {
@@ -37,6 +46,30 @@ function liveSearch(query) {
         }
     });
 }
+
+
+function sortProducts(products) {
+    const sortBy = $('#sort-dropdown').val();
+    switch (sortBy) {
+        case 'priceAsc':
+            products.sort((a, b) => a.price - b.price);
+            break;
+        case 'priceDesc':
+            products.sort((a, b) => b.price - a.price);
+            break;
+        case 'dateDesc':
+            products.sort((a, b) => b.art_num - a.art_num);
+            break;
+        case 'dateAsc':
+            products.sort((a, b) => a.art_num - b.art_num);
+            break;
+        default:
+            // Do nothing for default
+            break;
+    }
+}
+
+
 
 
 const cart = [];
@@ -98,6 +131,8 @@ function displayProducts(products) {
         const product = JSON.parse($(this).attr('data-product'));
         addToCart(product);
     });
+    //send displayed products to product counter
+    productCounter(products);
 }
 
 // function to add new products to card, checks if the product was already added or not, adds product or quantity

@@ -45,40 +45,57 @@
     </div>
 </nav>
 
-<!-- Main content: Cards -->
-<div class="container mt-4" id="product-container">
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 id="product-count">x products found</h2>
+        <div>
+            <label for="sort-dropdown" class="mr-2">Sort by:</label>
+            <select id="sort-dropdown" class="form-control d-inline-block w-auto">
+                <optgroup label="Date">
+                <option value="dateAsc">Oldest (Default)</option>
+                <option value="dateDesc">Latest</option>
+            </optgroup>
+            <optgroup label="Price">
+                <option value="priceAsc">Lowest to Highest &#x25B2;</option>
+                <option value="priceDesc">Highest to Lowest &#x25BC;</option>
+            </optgroup>
+            </select>
+        </div>
+    </div>
+ <!-- Main content: Cards -->
+ <div class="container mt-4" id="product-container">
     <!-- Product cards will be added here -->
 </div>
-
-<!-- Text: no Products found, display text when no matching products have been found -->
-<div id="no-products-text" class="text-center mt-4" style="display: none;">
-    Nothing here but us monkeys..
 </div>
 
-<!-- shopping cart -->
-<div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-labelledby="cart-modal-label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <!-- Text: no Products found, display text when no matching products have been found -->
+    <div id="no-products-text" class="text-center mt-4" style="display: none;">
+        Nothing here but us monkeys..
+    </div>
+</div>
+
+<!-- Modal: Shopping Cart -->
+<div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="cart-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="cart-modal-label">Shopping Cart</h5>
+                <h5 class="modal-title" id="cart-modal-label">Your Cart</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <ul id="cart-items">
-                    <!-- list cart items -->
+                <ul id="cart-items" class="list-group mb-3">
+                    <!-- Cart items will be added here -->
                 </ul>
-                <div class="total">
-                    <strong>Total:</strong> <span id="total-price">€0.00</span>
-                </div>
+                <h6 class="text-right">Total: <span id="total-price">€0.00</span></h6>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" id="checkout-button">Checkout</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shopping</button>
+                <button type="button" class="btn btn-primary">Checkout</button>
             </div>
         </div>
     </div>
 </div>
 </body>
-
 </html>
