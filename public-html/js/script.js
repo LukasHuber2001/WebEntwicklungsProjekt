@@ -20,6 +20,11 @@ $(document).ready(function() {
         const query = $('#search-input').val();
         liveSearch(query);
     });
+
+        // cart icon click listener
+        $('#cart-icon').on('click', function() {
+            $('#openPopupBtn').trigger('click');
+        });
 });
 
 //function to count the found products to display on index.html
@@ -206,3 +211,48 @@ function deleteCartItem(event) {
 
     updateCartDisplay();
 }
+
+// pop-up
+document.addEventListener("DOMContentLoaded", function() {
+    const popup = document.getElementById("popup");
+    const checkoutBtn = document.getElementById("checkout");
+    const closeBtn = document.querySelector(".close-btn");
+    const returnBtn = document.getElementById("returnBtn");
+    const loginBtn = document.getElementById("loginBtn");
+
+    function showPopup() {
+        popup.style.display = "block";
+    }
+
+    function hidePopup() {
+        popup.style.display = "none";
+    }
+
+    checkoutBtn.addEventListener("click", showPopup);
+
+    closeBtn.addEventListener("click", hidePopup);
+
+    window.addEventListener("click", function(event) {
+        if (event.target == popup) {
+            hidePopup();
+        }
+    });
+
+    returnBtn.addEventListener("click", function() {
+        hidePopup();
+    });
+
+    loginBtn.addEventListener("click", function() {
+        window.location.href = '../sites/login.html';
+    });
+
+    // Check if the user is logged in (placeholder condition)
+    const isLoggedIn = false; // Replace this with actual login check, once implemented
+
+    // If user is not logged in, show the popup when the cart modal is opened
+    $('#cart-modal').on('show.bs.modal', function() {
+        if (!isLoggedIn) {
+            showPopup();
+        }
+    });
+});
