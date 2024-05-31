@@ -1,0 +1,15 @@
+[
+    {
+        "id": 1,
+        "vorname":"lukas",
+        "nachname":"huber",
+        "adresse":"Leithastraße",
+        "adresse2":"NULL",
+        "ort":"Wien",
+        "plz": "1200",
+        "land":"Hoodie",
+        "username":"admin", 
+        "password":"admin",
+        "isAdmin":"TRUE"
+    }
+]
