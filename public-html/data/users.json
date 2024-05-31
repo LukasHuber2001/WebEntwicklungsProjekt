@@ -1,15 +1,1 @@
-[
-    {
-        "id": 1,
-        "vorname":"lukas",
-        "nachname":"huber",
-        "adresse":"Leithastraße",
-        "adresse2":"NULL",
-        "ort":"Wien",
-        "plz": "1200",
-        "land":"at",
-        "username":"admin", 
-        "password":"admin",
-        "isAdmin":"TRUE"
-    }
-]
+[{"id":"1","vorname":"Lukas","nachname":"Huber","adresse":"Leithastra\u00dfe","adresse2":null,"ort":"Wien","plz":"1200","land":"AT","username":"admin","password":"admin","isAdmin":"1"},{"id":"2","vorname":"t","nachname":"t","adresse":"t","adresse2":"t","ort":"t","plz":"t","land":"CZ","username":"t","password":"t","isAdmin":null},{"id":"4","vorname":"t","nachname":"t","adresse":"t","adresse2":"t","ort":"t","plz":"t","land":"CZ","username":"e","password":"t","isAdmin":null},{"id":"5","vorname":"t","nachname":"t","adresse":"t","adresse2":"t","ort":"t","plz":"t","land":"CZ","username":"b","password":"t","isAdmin":null}]
