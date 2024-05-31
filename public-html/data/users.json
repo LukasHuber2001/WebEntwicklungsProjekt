@@ -7,7 +7,7 @@
         "adresse2":"NULL",
         "ort":"Wien",
         "plz": "1200",
-        "land":"Hoodie",
+        "land":"at",
         "username":"admin", 
         "password":"admin",
         "isAdmin":"TRUE"

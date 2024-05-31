@@ -20,3 +20,5 @@ foreach ($array as $value){
 }   
 
 echo "Data inserted sucessfully";
+
+?>

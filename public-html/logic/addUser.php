@@ -1,22 +1,21 @@
 <?php
 
-$connect = mysqli_connect('localhost', 'root', '', 'test');
+echo $_POST['vorname'];
+echo $_REQUEST['vorname'];
+/*
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+$mysqli = new mysqli("localhost", "root", '', "test");
 
-$filename = "data/users.json";
+/* Prepared statement, stage 1: prepare 
+$stmt = $mysqli->prepare("INSERT INTO users(id, vorname, nachname, adresse, adresse2, ort, plz, land, username, password, isAdmin) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)");
 
-$data = file_get_contents($filename);
+/* Prepared statement, stage 2: bind and execute 
+$id = NULL;
+$vorname, nachname, adresse, adresse2, ort, plz, land, username, password, isAdmin
 
-$array = json_decode($data, true);
+$stmt->bind_param($id, $label); // "is" means that $id is bound as an integer and $label as a string
 
+$stmt->execute();
 
-foreach ($array as $value){
-
-    $query = "INSERT INTO `users`(`vorname`, `nachname`, `adresse`, `adresse2`, `ort`, `plz`, `land`, `username`, `password`, `isAdmin`)
-    VALUES ('".$value['vorname']."','".$value['name']."','".$value['adresse']."','".$value['adresse2']."','".$value['ort']."','".$value['plz']."','".$value['land']."','".$value['username']."','".$value['password']."')";
-    
-    mysqli_query($connect, $query);
-
-}   
-
-
+*/
 ?>

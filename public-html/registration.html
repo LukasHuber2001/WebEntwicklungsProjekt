@@ -26,36 +26,36 @@
 </head>
 <body>
 
-<form action="logic/addUser" method="post">
+<form action="logic/addUser.php" method="post">
     <h2 class="mb-4">Registrierung</h2>
     <div class="form-group">
         <label for="vorname">Vorname</label>
-        <input type="text" class="form-control" id="vorname" placeholder="Vorname" required>
+        <input type="text" class="form-control" name="vorname" placeholder="Vorname" required>
     </div>
     <div class="form-group">
         <label for="nachname">Nachname</label>
-        <input type="text" class="form-control" id="nachname" placeholder="Nachname" required>
+        <input type="text" class="form-control" name="nachname" placeholder="Nachname" required>
     </div>
     <div class="form-group">
         <label for="adresse">Adresse</label>
-        <input type="text" class="form-control" id="adresse" placeholder="Adresse" required>
+        <input type="text" class="form-control" name="adresse" placeholder="Adresse" required>
     </div>
     <div class="form-group">
         <label for="adresse2">Adresse2</label>
-        <input type="text" class="form-control" id="adresse2" placeholder="Adresse Zeile 2" required>
+        <input type="text" class="form-control" name="adresse2" placeholder="Adresse Zeile 2" required>
     </div>
     <div class="form-group">
         <label for="ort">Ort</label>
-        <input type="text" class="form-control" id="ort" placeholder="Ort" required>
+        <input type="text" class="form-control" name="ort" placeholder="Ort" required>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
             <label for="plz">PLZ</label>
-            <input type="text" class="form-control" id="plz" placeholder="PLZ" required>
+            <input type="text" class="form-control" name="plz" placeholder="PLZ" required>
         </div>
         <div class="form-group col-md-6">
             <label for="land">Land</label>
-            <select class="form-control" id="land" required>
+            <select class="form-control" name="land" required>
                 <option value="">Bitte wählen</option>
                 <option value="AL">Albanien</option>
                 <option value="AT">Österreich</option>
@@ -100,11 +100,11 @@
     </div>
     <div class="form-group">
         <label for="username">Benutzername</label>
-        <input type="text" class="form-control" id="username" placeholder="Benutzername" required>
+        <input type="text" class="form-control" name="username" placeholder="Benutzername" required>
     </div>
     <div class="form-group">
         <label for="password">Passwort</label>
-        <input type="password" class="form-control" id="password" placeholder="Passwort" required>
+        <input type="password" class="form-control" name="password" placeholder="Passwort" required>
     </div>
     <button type="submit" class="btn btn-primary">Registrieren</button>
 </form>
