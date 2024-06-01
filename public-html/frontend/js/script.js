@@ -37,7 +37,7 @@ function productCounter(products) {
 
 function liveSearch(query) {
     $.ajax({
-        url: '../logic/requestHandler.php',
+        url: '../../backend/logic/requestHandler.php',
         type: 'GET',
         data: { method: "searchProducts", query: query },
         success: function(data) {
