@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anmeldung</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Stile für das zentrierte Formular */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: auto;
+        }
+        form {
+            width: 300px;
+        }
+        footer{
+            position: fixed;
+            bottom: 0px;
+        }
+    </style>
+</head>
+<body>
+
+<form>
+    <h2 class="mb-4">Anmeldung</h2>
+    <div class="form-group">
+        <label for="username">Benutzername</label>
+        <input type="text" class="form-control" id="username" placeholder="Benutzername" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Passwort</label>
+        <input type="password" class="form-control" id="password" placeholder="Passwort" required>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block">Anmelden</button>
+    <div class="text-center mt-3">
+        <a href="#">Passwort vergessen?</a>
+    </div>
+</form>
+
+<!-- Bootstrap JS und jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+<footer>
+
+    <div class="footer-links">
+        <a href="index.html">Home</a> |
+        <a href="impressum.html">Impressum </a> |
+        <a href="privacy.html">Privacy Policy</a> |
+        <a href="tos.html">Terms of Service</a>
+    </div>
+
+    <div class="footer-copyright">
+        &copy; <a href="index.html">Zen Monkey Fashion GmbH</a> 2023
+    </div>
+</footer>
+</html>
