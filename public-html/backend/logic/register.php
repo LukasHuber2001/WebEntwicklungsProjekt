@@ -1,5 +1,5 @@
 <?php
-
+echo 'does this link work?';
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $mysqli = new mysqli("localhost", "root", '', "test");
 mysqli_set_charset($mysqli, "utf8");
