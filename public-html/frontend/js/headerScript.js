@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    //user icon dropdown
+    $('.dropdown-toggle').dropdown();
+
     // Cart icon click listener
     $('#cart-icon').on('click', function() {
         $('#openPopupBtn').trigger('click');
