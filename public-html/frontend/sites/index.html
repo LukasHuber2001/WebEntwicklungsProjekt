@@ -19,96 +19,36 @@
 </head>
 
 <body>
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Zen Monkeys</a>
-    <div class="search-container">
-        <div class="input-group">
-            <span id="search-icon" class="input-group-prepend search-icon">
-                <i class="fas fa-search"></i>
-            </span>
-            <input type="text" id="search-input" class="form-control" placeholder="Search products...">
-            <span id="clear-icon" class="input-group-append clear-icon" style="display: none;">
-                <i class="fas fa-times"></i>
-            </span>
-        </div>
-    </div>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="#" id="cart-icon" data-toggle="modal" data-target="#cart-modal">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="badge badge-pill badge-danger" id="cart-count">0</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+    <!-- Include the header -->
+    <div id="header-container"></div>
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 id="product-count">x products found</h2>
-        <div>
-            <label for="sort-dropdown" class="mr-2">Sort by:</label>
-            <select id="sort-dropdown" class="form-control d-inline-block w-auto">
-                <optgroup label="Date">
-                <option value="dateAsc">Oldest (Default)</option>
-                <option value="dateDesc">Latest</option>
-            </optgroup>
-            <optgroup label="Price">
-                <option value="priceAsc">Lowest to Highest &#x25B2;</option>
-                <option value="priceDesc">Highest to Lowest &#x25BC;</option>
-            </optgroup>
-            </select>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 id="product-count">x products found</h2>
+            <div>
+                <label for="sort-dropdown" class="mr-2">Sort by:</label>
+                <select id="sort-dropdown" class="form-control d-inline-block w-auto">
+                    <optgroup label="Date">
+                        <option value="dateAsc">Oldest (Default)</option>
+                        <option value="dateDesc">Latest</option>
+                    </optgroup>
+                    <optgroup label="Price">
+                        <option value="priceAsc">Lowest to Highest &#x25B2;</option>
+                        <option value="priceDesc">Highest to Lowest &#x25BC;</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+        <!-- Main content: Cards -->
+        <div class="container mt-4" id="product-container">
+            <!-- Product cards will be added here -->
         </div>
     </div>
- <!-- Main content: Cards -->
- <div class="container mt-4" id="product-container">
-    <!-- Product cards will be added here -->
-</div>
-</div>
 
     <!-- Text: no Products found, display text when no matching products have been found -->
     <div id="no-products-text" class="text-center mt-4" style="display: none;">
         Nothing here but us monkeys..
     </div>
-</div>
-
-<!-- Modal: Shopping Cart -->
-<div class="modal fade" id="cart-modal" tabindex="-1" aria-labelledby="cart-modal-label" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="cart-modal-label">Your Cart</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <ul id="cart-items" class="list-group mb-3">
-                    <!-- Cart items will be added here -->
-                </ul>
-                <h6 class="text-right">Total: <span id="total-price">€0.00</span></h6>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Continue Shopping</button>
-                <button type="button" class="btn btn-primary" id="checkout">Checkout</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Popup HTML -->
-<div id="popup" class="popup">
-    <div class="popup-content">
-        <span class="close-btn">&times;</span>
-        <h2>You are not logged in</h2>
-        <p>You need to log in to access this site</p>
-        <button class="popup-btn" id="returnBtn">Return to Cart</button>
-        <button class="popup-btn" id="loginBtn">Log In</button>
-        <a href="#" id="registerLink">Don't have an account yet? Register now!</a>
-    </div>
-</div>
-
 </body>
+
 </html>
