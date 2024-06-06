@@ -2,102 +2,102 @@
   {
     "art_num": 1,
     "name": "T-Red",
-    "gender":"Männer,Frauen,Unisex",
+    "gender":"Men,Women,Unisex",
     "price": 19.99,
     "size":"S,M,L,XL,XXL",
-    "color": "Rot",
+    "color": "Red",
     "category":"Tshirt",
-    "image_url": "https://cdn.pixabay.com/photo/2016/12/06/09/31/blank-1886008_1280.png"
+    "image_url": "../../backend/data/pictures/products/art1.png"
   },
   {
     "art_num": 2,
-    "name": "Braune Herrenjacke",
-    "gender":"Männer",
+    "name": "Leathermen",
+    "gender":"Men",
     "price": 79.99,
     "size":"M,L,XL,XXL",
-    "color": "Braun",
-    "category":"Jacke",
-    "image_url": "https://cdn.pixabay.com/photo/2017/09/07/04/54/khaki-2723896_1280.jpg"
+    "color": "Brown",
+    "category":"Jacket",
+    "image_url": "../../backend/data/pictures/products/art2.png"
   },
   {
     "art_num": 3,
-    "name": "Brilliantenarmband",
-    "gender":"Frauen",
+    "name": "VVS Band",
+    "gender":"Men,Women,Unisex",
     "price": 29.99,
     "size":"S,M,L",
-    "color": "Silber",
-    "category":"Accessoires",
-    "image_url": "  https://cdn.pixabay.com/photo/2016/11/11/17/34/diamond-1817291_1280.png"
+    "color": "Silver",
+    "category":"Accessories",
+    "image_url": "../../backend/data/pictures/products/art3.png"
   },
   {
     "art_num": 4,
     "name": "Monkey Basketball shorts mens",
-    "gender":"Männer" ,
+    "gender":"Men" ,
     "price": 19.99,
     "size": "S,M,L,XL,XXL", 
-    "color": "Grün,Violett",
-    "category":"Hosen",
-    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+    "color": "Green,Violet",
+    "category":"Pants",
+    "image_url": "../../backend/data/pictures/products/art4.png"
   },
 
   {
     "art_num": 5,
-    "name": "Zen Socken",
-    "gender":"Männer,Frauen,Unisex",
+    "name": "Zen Socks",
+    "gender":"Men,Women,Unisex",
     "price": 12.99,
     "size":"one-size",
-    "color": "Violett,Grün,Orange",
+    "color": "Green,Violet,Orange",
     "category": "Accessories",
-    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+    "image_url": "../../backend/data/pictures/products/art5.png"
   },
   {
     "art_num": 6,
-    "name": "Monkeys Polo ",
-    "gender":"Männer",
+    "name": "Monkeys Polo",
+    "gender":"Men",
     "price": 21.99,
     "size":"S,M,L,XL,XXL",
-    "color": "Orange,Schwarz",
+    "color": "Orange,Black",
     "category":"Tshirt",
-    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+    "image_url": "../../backend/data/pictures/products/art6.png"
   },
   {
     "art_num": 7,
     "name": "T-Shirt Striped",
-    "gender":"Männer,Frauen,Unisex",
+    "gender":"Men,Women,Unisex",
     "price": 39.99,
     "size":"S,M,L,XL,XXL",
-    "color": "Schwarz-Weiß,Rot-Blau",
+    "color": "Black,White",
     "category":"Tshirt",
-    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+    "image_url": "../../backend/data/pictures/products/art7.png"
   },
    {
     "art_num": 8,
     "name": "Baggy Jeans",
-    "gender":"Männer",
+    "gender":"Men",
     "price": 79.99,
     "size":"M,L,XL,XXL",
-    "color": "Black,Gray",
-    "category":"Hose",
-    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+    "color": "Blue",
+    "category":"Pants",
+    "image_url": "../../backend/data/pictures/products/art8.png"
   },
    {
     "art_num": 9,
-    "name": "Hoodie mit Aufdruck",
-    "gender":"Männer,Frauen,Unisex",
+    "name": "Hoodie with Print",
+    "gender":"Men,Women,Unisex",
     "price": 99.99,
     "size":"L,XL,XXL,3XL",
-    "color": "Schwarz,Grau,Dunkelblau",
+    "color": "Black,Gray,Blue",
     "category":"Hoodie",
-    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+    "image_url": "../../backend/data/pictures/products/art9.png"
   },
    {
     "art_num": 10,
-    "name": "Anzug",
-    "gender":"Männer",
+    "name": "The 007",
+    "gender":"Men",
     "price": 239.99,
     "size":"M,L,XL",
-    "color": "Schwarz,Blau,Grau",
-    "category":"Anzug",
-    "image_url": "https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg"
+    "color": "Black,White,Blue",
+    "category":"Suit",
+    "image_url": "../../backend/data/pictures/products/art10.png"
   }
 ]
