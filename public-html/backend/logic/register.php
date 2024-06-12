@@ -74,7 +74,7 @@ if(isset($_POST)) {
             $rowsAsJSON = json_encode($rows);
             file_put_contents("../data/users.json", $rowsAsJSON);
         }   
-        header("Location: http://localhost/webentwicklungsprojekt/public-html/frontend/sites/impressum.html");
+        header("Location: http://localhost/webentwicklungsprojekt/public-html/frontend/sites/index.html");
         die();
 }
 }
