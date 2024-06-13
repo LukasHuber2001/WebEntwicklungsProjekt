@@ -1,11 +1,10 @@
 <?php
-
+session_start();
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 $mysqli = new mysqli("localhost", "root", '', "test");
 mysqli_set_charset($mysqli, "utf8");
 
 if(isset($_POST)) {
-    echo 'does this link work?';
     $error = false;
     $email = $_POST['email'];
     $password = $_POST['password'];
