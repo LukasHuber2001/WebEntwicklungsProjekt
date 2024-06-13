@@ -1,12 +1,11 @@
 $(document).ready(function() {
-    // Load cart items from local storage
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
-    displayCartItems(cart);
+    // Load cart items from the server
+    loadCartFromServer();
 
     // Pay Now button click event
     $('#pay-now').on('click', async function() {
-        // Clear cart in local storage
-        localStorage.removeItem('cart');
+        // Clear cart on the server
+        clearCartOnServer();
 
         // Generate and save receipt
         const receiptFileName = await generateAndSaveReceipt();
@@ -26,10 +25,39 @@ $(document).ready(function() {
         if (receiptFileName) {
             window.location.href = `../../backend/data/receipts/${receiptFileName}`;
         } else {
-            alert('An Error has occured while loading your receipt, please contact customer Support.');
+            alert('An Error has occurred while loading your receipt, please contact customer Support.');
         }
     });
 });
+
+function loadCartFromServer() {
+    $.ajax({
+        url: '../../backend/logic/cartHandler.php',
+        type: 'GET',
+        data: { method: 'loadCart' },
+        success: function(data) {
+            const cart = JSON.parse(data) || [];
+            displayCartItems(cart);
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+function clearCartOnServer() {
+    $.ajax({
+        url: '../../backend/logic/cartHandler.php',
+        type: 'POST',
+        data: { method: 'saveCart', cart: JSON.stringify([]) },
+        success: function(data) {
+            console.log('Cart cleared on server');
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
 
 async function generateAndSaveReceipt() {
     const { jsPDF } = window.jspdf;
@@ -41,7 +69,7 @@ async function generateAndSaveReceipt() {
     const response = await fetch('../../backend/data/users.json');
     const customers = await response.json();
 
-    const customerId = 11;
+    const customerId = 11; // Placeholder customer ID
     const customer = customers.find(c => c.id == customerId);
 
     if (!customer) {
@@ -50,9 +78,8 @@ async function generateAndSaveReceipt() {
     }
 
     const buyerAddress = `${customer.vorname} ${customer.nachname}\n${customer.adresse}\n${customer.ort}, ${customer.plz}`;
-    const invoiceNumber = 1;
-        // Mock current date for now
-        const currDate = "01.01.2000"; // Replace with actual current date logic from database
+    const invoiceNumber = 1; // Placeholder invoice number
+    const currDate = "01.01.2000"; // Placeholder current date
 
     // Example products (mocking)
     const products = [
@@ -152,14 +179,12 @@ function displayCartItems(cart) {
 
     $('#checkout-total-price').text(`€${totalPrice.toFixed(2)}`);
 
-    // Quantity input change event
     $('.quantity-input').on('change', function() {
         const artNum = parseInt($(this).data('art-num'));
         const newQuantity = parseInt($(this).val());
         updateCartQuantity(artNum, newQuantity);
     });
 
-    // Delete button click event
     $('.delete-btn').on('click', function() {
         const artNum = parseInt($(this).data('art-num'));
         deleteCartItem(artNum);
@@ -174,14 +199,27 @@ function updateCartQuantity(artNum, newQuantity) {
         cartItem.quantity = newQuantity;
     }
 
-    localStorage.setItem('cart', JSON.stringify(cart));
-    displayCartItems(cart);
+    saveCartToServer();
 }
 
 function deleteCartItem(artNum) {
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
     cart = cart.filter(item => item.art_num !== artNum);
 
-    localStorage.setItem('cart', JSON.stringify(cart));
-    displayCartItems(cart);
+    saveCartToServer();
+}
+
+function saveCartToServer(callback) {
+    $.ajax({
+        url: '../../backend/logic/cartHandler.php',
+        type: 'POST',
+        data: { method: 'saveCart', cart: JSON.stringify(cart) },
+        success: function(data) {
+            displayCartItems(cart);
+            if (callback) callback();
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
 }

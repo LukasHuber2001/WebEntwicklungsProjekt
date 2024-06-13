@@ -6,6 +6,9 @@ $(document).ready(function() {
         if (path !== "index.html") {
             $("#search-container").remove(); // Remove the search container for all pages except index.html
         }
+        if (path == "checkout.html") {
+            $("#cart-icon").remove(); // Remove the search container for all pages except index.html
+        }
     });
 
     $("footer").load("../sites/inc/footer.html");

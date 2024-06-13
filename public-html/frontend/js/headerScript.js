@@ -58,10 +58,14 @@ $(document).ready(function() {
         if (!isLoggedIn) {
             showPopup();
         } else {
-            localStorage.setItem('cart', JSON.stringify(cart));
-            window.location.href = 'checkout.html';
+            saveCartToServer(function() {
+                window.location.href = 'checkout.html';
+            });
         }
     });
+
+    // Load cart from server
+    loadCartFromServer();
 });
 
 function liveSearch(query) {
@@ -81,9 +85,8 @@ function liveSearch(query) {
     });
 }
 
-const cart = [];
+let cart = [];
 
-// Function to add new products to cart
 function addToCart(product) {
     const existingProduct = cart.find(item => item.art_num === product.art_num);
 
@@ -93,11 +96,9 @@ function addToCart(product) {
         cart.push({ ...product, quantity: 1 });
     }
 
-    updateCartDisplay();
-    localStorage.setItem('cart', JSON.stringify(cart));
+    saveCartToServer();
 }
 
-// Update cart, empties items each load, calculates total price, and displays products
 function updateCartDisplay() {
     const cartItems = $('#cart-items');
     cartItems.empty();
@@ -108,7 +109,6 @@ function updateCartDisplay() {
         const itemTotalPrice = item.price * item.quantity;
         totalPrice += itemTotalPrice;
 
-        // Use HTML to create a list for each cart item
         const cartItem = $(`
             <li class="cart-item">
                 <span>${item.name}</span>
@@ -120,19 +120,13 @@ function updateCartDisplay() {
         cartItems.append(cartItem);
     });
 
-    // Update total price
     $('#total-price').text(`€${totalPrice.toFixed(2)}`);
-
-    // Simple event listener for quantity input and delete button
-    $('.quantity-input').on('change', updateQuantity);
-    $('.delete-btn').on('click', deleteCartItem);
-    // Updates the counter for the cart icon in the navbar
     $('#cart-count').text(cart.length);
 
-    localStorage.setItem('cart', JSON.stringify(cart));
+    $('.quantity-input').on('change', updateQuantity);
+    $('.delete-btn').on('click', deleteCartItem);
 }
 
-// Handles the quantity fields
 function updateQuantity(event) {
     const artNum = parseInt($(event.target).data('art-num'));
     const newQuantity = parseInt($(event.target).val());
@@ -142,17 +136,43 @@ function updateQuantity(event) {
         cartItem.quantity = newQuantity;
     }
 
-    updateCartDisplay();
+    saveCartToServer();
 }
 
-// Deletes product off of cart
 function deleteCartItem(event) {
     const artNum = parseInt($(event.target).data('art-num'));
 
-    const cartIndex = cart.findIndex(item => item.art_num === artNum);
-    if (cartIndex !== -1) {
-        cart.splice(cartIndex, 1);
-    }
+    cart = cart.filter(item => item.art_num !== artNum);
 
-    updateCartDisplay();
+    saveCartToServer();
+}
+
+function saveCartToServer(callback) {
+    $.ajax({
+        url: '../../backend/logic/cartHandler.php',
+        type: 'POST',
+        data: { method: 'saveCart', cart: JSON.stringify(cart) },
+        success: function(data) {
+            updateCartDisplay();
+            if (callback) callback();
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
+}
+
+function loadCartFromServer() {
+    $.ajax({
+        url: '../../backend/logic/cartHandler.php',
+        type: 'GET',
+        data: { method: 'loadCart' },
+        success: function(data) {
+            cart = JSON.parse(data) || [];
+            updateCartDisplay();
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    });
 }
