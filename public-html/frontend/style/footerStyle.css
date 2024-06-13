@@ -7,6 +7,7 @@
     bottom: 0;
     width: 100%;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-top: auto; /* Push footer to the bottom */
 }
 
 .footer-links a {
@@ -29,4 +30,11 @@
 
 footer {
     margin-top: auto; /* Push footer to the bottom */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
 }

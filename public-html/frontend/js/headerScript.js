@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    //user icon dropdown
+    // User icon dropdown
     $('.dropdown-toggle').dropdown();
 
     // Cart icon click listener
@@ -22,9 +22,11 @@ $(document).ready(function() {
 
     // Pop-up
     const popup = document.getElementById("popup");
+    const emptyCartPopup = document.getElementById("empty-cart-popup");
     const closeBtn = document.querySelector(".close-btn");
     const returnBtn = document.getElementById("returnBtn");
     const loginBtn = document.getElementById("loginBtn");
+    const buyStuffBtn = document.getElementById("buyStuffBtn");
 
     function showPopup() {
         popup.style.display = "block";
@@ -34,11 +36,27 @@ $(document).ready(function() {
         popup.style.display = "none";
     }
 
-    closeBtn.addEventListener("click", hidePopup);
+    function showEmptyCartPopup() {
+        emptyCartPopup.style.display = "block";
+    }
+
+    function hideEmptyCartPopup() {
+        emptyCartPopup.style.display = "none";
+    }
+
+    closeBtn.addEventListener("click", function(event) {
+        if (event.target.closest(".popup-content").parentNode === popup) {
+            hidePopup();
+        } else {
+            hideEmptyCartPopup();
+        }
+    });
 
     window.addEventListener("click", function(event) {
         if (event.target == popup) {
             hidePopup();
+        } else if (event.target == emptyCartPopup) {
+            hideEmptyCartPopup();
         }
     });
 
@@ -50,6 +68,10 @@ $(document).ready(function() {
         window.location.href = '../sites/login.html';
     });
 
+    buyStuffBtn.addEventListener("click", function() {
+        window.location.href = 'index.html';
+    });
+
     // Check if the user is logged in (placeholder condition)
     const isLoggedIn = true; // Replace this with actual login check, once implemented
 
@@ -58,14 +80,15 @@ $(document).ready(function() {
         if (!isLoggedIn) {
             showPopup();
         } else {
-            saveCartToServer(function() {
-                window.location.href = 'checkout.html';
-            });
+            if (cart.length === 0) {
+                showEmptyCartPopup();
+            } else {
+                saveCartToServer(function() {
+                    window.location.href = 'checkout.html';
+                });
+            }
         }
     });
-
-    // Load cart from server
-    loadCartFromServer();
 });
 
 function liveSearch(query) {
@@ -85,8 +108,9 @@ function liveSearch(query) {
     });
 }
 
-let cart = [];
+const cart = [];
 
+// Function to add new products to cart
 function addToCart(product) {
     const existingProduct = cart.find(item => item.art_num === product.art_num);
 
@@ -96,9 +120,11 @@ function addToCart(product) {
         cart.push({ ...product, quantity: 1 });
     }
 
-    saveCartToServer();
+    updateCartDisplay();
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// Update cart, empties items each load, calculates total price, and displays products
 function updateCartDisplay() {
     const cartItems = $('#cart-items');
     cartItems.empty();
@@ -109,6 +135,7 @@ function updateCartDisplay() {
         const itemTotalPrice = item.price * item.quantity;
         totalPrice += itemTotalPrice;
 
+        // Use HTML to create a list for each cart item
         const cartItem = $(`
             <li class="cart-item">
                 <span>${item.name}</span>
@@ -120,13 +147,19 @@ function updateCartDisplay() {
         cartItems.append(cartItem);
     });
 
+    // Update total price
     $('#total-price').text(`€${totalPrice.toFixed(2)}`);
-    $('#cart-count').text(cart.length);
 
+    // Simple event listener for quantity input and delete button
     $('.quantity-input').on('change', updateQuantity);
     $('.delete-btn').on('click', deleteCartItem);
+    // Updates the counter for the cart icon in the navbar
+    $('#cart-count').text(cart.length);
+
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+// Handles the quantity fields
 function updateQuantity(event) {
     const artNum = parseInt($(event.target).data('art-num'));
     const newQuantity = parseInt($(event.target).val());
@@ -136,43 +169,33 @@ function updateQuantity(event) {
         cartItem.quantity = newQuantity;
     }
 
-    saveCartToServer();
+    updateCartDisplay();
 }
 
+// Deletes product off of cart
 function deleteCartItem(event) {
     const artNum = parseInt($(event.target).data('art-num'));
 
-    cart = cart.filter(item => item.art_num !== artNum);
+    const cartIndex = cart.findIndex(item => item.art_num === artNum);
+    if (cartIndex !== -1) {
+        cart.splice(cartIndex, 1);
+    }
 
-    saveCartToServer();
+    updateCartDisplay();
 }
 
+// Save cart to server via AJAX
 function saveCartToServer(callback) {
     $.ajax({
-        url: '../../backend/logic/cartHandler.php',
+        url: '../../backend/logic/requestHandler.php',
         type: 'POST',
-        data: { method: 'saveCart', cart: JSON.stringify(cart) },
-        success: function(data) {
-            updateCartDisplay();
+        data: { method: "saveCart", cart: JSON.stringify(cart) },
+        success: function(response) {
+            console.log('Cart saved to server:', response);
             if (callback) callback();
         },
         error: function(xhr, status, error) {
-            console.error(error);
-        }
-    });
-}
-
-function loadCartFromServer() {
-    $.ajax({
-        url: '../../backend/logic/cartHandler.php',
-        type: 'GET',
-        data: { method: 'loadCart' },
-        success: function(data) {
-            cart = JSON.parse(data) || [];
-            updateCartDisplay();
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
+            console.error('Error saving cart:', error);
         }
     });
 }

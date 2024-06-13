@@ -11,8 +11,7 @@ $(document).ready(function() {
         const receiptFileName = await generateAndSaveReceipt();
 
         // Display order success message
-        $('#checkout-cart-items').hide();
-        $('#pay-now').hide();
+        $('#checkout-cart').hide();
         $('#order-success').show();
 
         // Store receipt filename for download
