@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zen Monkeys - Checkout</title>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for the icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="../style/mainStyle.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="../js/incScript.js"></script>
+    <script src="../js/checkoutScript.js"></script>
+</head>
+
+<body>
+    <!-- Include the header -->
+    <div id="header-container"></div>
+
+    <div class="container mt-4">
+        <h2>Your Cart</h2>
+        <ul id="checkout-cart-items" class="list-group mb-3">
+            <!-- Cart items will be added here -->
+        </ul>
+        <h6 class="text-right">Total: <span id="checkout-total-price">€0.00</span></h6>
+        <div class="text-right">
+            <button class="btn btn-primary" id="pay-now">Pay Now</button>
+        </div>
+    </div>
+
+    <div id="order-success" class="text-center mt-4" style="display: none;">
+        <h3>Order gone through successfully!</h3>
+        <button class="btn btn-success" id="download-receipt">Show receipt</button>
+    </div>
+
+</body>
+<footer></footer>
+</html>

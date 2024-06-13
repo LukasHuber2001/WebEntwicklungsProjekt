@@ -51,14 +51,15 @@ $(document).ready(function() {
     });
 
     // Check if the user is logged in (placeholder condition)
-    const isLoggedIn = false; // Replace this with actual login check, once implemented
+    const isLoggedIn = true; // Replace this with actual login check, once implemented
 
     // If user is not logged in, show the popup when the checkout button is clicked
     $('#checkout').on('click', function() {
         if (!isLoggedIn) {
             showPopup();
         } else {
-            // Proceed with checkout
+            localStorage.setItem('cart', JSON.stringify(cart));
+            window.location.href = 'checkout.html';
         }
     });
 });
@@ -93,6 +94,7 @@ function addToCart(product) {
     }
 
     updateCartDisplay();
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 // Update cart, empties items each load, calculates total price, and displays products
@@ -124,9 +126,10 @@ function updateCartDisplay() {
     // Simple event listener for quantity input and delete button
     $('.quantity-input').on('change', updateQuantity);
     $('.delete-btn').on('click', deleteCartItem);
-
     // Updates the counter for the cart icon in the navbar
     $('#cart-count').text(cart.length);
+
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
 
 // Handles the quantity fields
