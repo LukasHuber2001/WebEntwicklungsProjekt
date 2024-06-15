@@ -2,7 +2,7 @@
 
 $connect = mysqli_connect('localhost', 'root', '', 'test');
 
-$filename = "data/products.json";
+$filename = "../data/products.json";
 
 $data= file_get_contents($filename);
 

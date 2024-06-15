@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 14. Jun 2024 um 20:09
+-- Erstellungszeit: 15. Jun 2024 um 16:56
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -62,7 +62,9 @@ INSERT INTO `artikel` (`art_num`, `name`, `gender`, `price`, `size`, `color`, `c
 
 CREATE TABLE `orders` (
   `user_id` int(10) NOT NULL,
-  `artikel` varchar(20) NOT NULL
+  `a_id` int(10) NOT NULL,
+  `r_id` int(10) NOT NULL,
+  `id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -73,7 +75,7 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `receipt` (
   `id` int(10) NOT NULL,
-  `timestamp` date NOT NULL,
+  `timestamp` datetime NOT NULL,
   `user_id` int(10) NOT NULL,
   `total` int(10) NOT NULL,
   `status` varchar(10) NOT NULL,
@@ -107,7 +109,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `vorname`, `nachname`, `adresse`, `adresse2`, `ort`, `plz`, `land`, `username`, `password`, `isAdmin`, `email`, `aktiv`) VALUES
-(1, 'Lukas', 'Huber', 'Leithastraße', NULL, 'Wien', '1200', 'AT', 'admin', 'admin', 1, 'admin@gmail.com', 0),
+(1, 'Lukas', 'Huber', 'Leithastraße', NULL, 'Wien', '1200', 'AT', 'admin', 'admin', 1, 'admin@gmail.com', 1),
 (11, 'test', 'test', 'test', 'test', 'test', '213', 'AT', 'test', '$2y$10$5a7ccNp0YM8Yy', NULL, 'testtesttest@gmail.c', 0),
 (12, 'final', 'test', 'test', 'test', 'test', '1200', 'AT', 'test', '$2y$10$IGl3vLgWF0qHQ', NULL, 'correctEmailFormat@g', 0),
 (13, 'abc', 'abc', 'abc', 'avb', 'wien', '1200', 'AT', 'test', '$2y$10$2YLgOYESydQYn', NULL, 'realEmail@gmail.com', 0),
@@ -127,7 +129,10 @@ ALTER TABLE `artikel`
 -- Indizes für die Tabelle `orders`
 --
 ALTER TABLE `orders`
-  ADD KEY `test` (`user_id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `test` (`user_id`),
+  ADD KEY `r_id` (`r_id`),
+  ADD KEY `a_id` (`a_id`);
 
 --
 -- Indizes für die Tabelle `receipt`
@@ -145,6 +150,12 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT für exportierte Tabellen
 --
+
+--
+-- AUTO_INCREMENT für Tabelle `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT für Tabelle `receipt`
@@ -166,6 +177,8 @@ ALTER TABLE `users`
 -- Constraints der Tabelle `orders`
 --
 ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`r_id`) REFERENCES `receipt` (`id`),
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`a_id`) REFERENCES `artikel` (`art_num`),
   ADD CONSTRAINT `test` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
