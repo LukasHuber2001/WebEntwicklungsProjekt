@@ -1,0 +1,26 @@
+Array
+(
+    [firstName] => d
+    [lastName] => d
+    [address] => d
+    [postcode] => d
+    [city] => d
+    [country] => DK
+    [email] => d@gmail.com
+    [username] => d
+    [password] => Password
+    [passwordSecond] => Password
+)
+Array
+(
+    [firstName] => d
+    [lastName] => d
+    [address] => d
+    [postcode] => d
+    [city] => d
+    [country] => DK
+    [email] => d@gmail.com
+    [username] => d
+    [password] => password
+    [passwordSecond] => password
+)

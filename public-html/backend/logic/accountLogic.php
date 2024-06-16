@@ -19,12 +19,12 @@ class profileLogic{
                 // als User eingeloggt
                 $result['status'] = 'loggedInUser';
             }
-        } elseif (isset($_COOKIE['rememberLogin']) && isset($_COOKIE['username'])) {
+        } elseif (isset($_COOKIE['rememberCheck']) && isset($_COOKIE['username'])) {
             // setze Session-Daten wenn Cookies vorhanden
             if (!isset($_SESSION)) {
                 session_start();
             }
-            // der status, wenn zusätzlich ein cookie gestzt wurde (bzw das rememberLogin aktiviert ist)
+            // der status, wenn zusätzlich ein cookie gestzt wurde (bzw das rememberCheck aktiviert ist)
             $_SESSION['username'] = $_COOKIE['username'];
             $_SESSION['admin'] = $_COOKIE['admin'] ?? false;
             if ($_SESSION['admin']) {
@@ -46,25 +46,25 @@ class profileLogic{
         $result = array();
         $person = $param;
         // Handling, wenn ein Eintrag fehlt
-        if (empty($person['vorname']) || strlen(trim($person['vorname'])) == 0) {
+        if (empty($person['firstName']) || strlen(trim($person['firstName'])) == 0) {
             $result['error'] = 'Bitte geben Sie einen validen Vornamen ein!';
             return $result;
         }
-        if (empty($person['nachname']) || strlen(trim($person['nachname'])) == 0) {
+        if (empty($person['lastName']) || strlen(trim($person['lastName'])) == 0) {
             $result['error'] = 'Bitte geben Sie einen validen Nachnamen ein!';
             return $result;
         }
-        if (empty($param['addresse']) || !isset($param['addresse']) || strlen(trim($param['addresse'])) == 0) {
+        if (empty($param['address']) || !isset($param['address']) || strlen(trim($param['address'])) == 0) {
             $result['error'] = 'Bitte geben Sie eine valide Adresse ein!';
         }
-        if (empty($param['plz']) || !isset($param['plz']) || strlen(trim($param['plz'])) == 0) {
+        if (empty($param['postcode']) || !isset($param['postcode']) || strlen(trim($param['postcode'])) == 0) {
             $result['error'] = 'Bitte geben Sie eine valide Postleitzahl ein!';
         }
-        if (empty($param['ort']) || !isset($param['ort']) || strlen(trim($param['ort'])) == 0) {
+        if (empty($param['city']) || !isset($param['city']) || strlen(trim($param['city'])) == 0) {
             $result['error'] = 'Bitte geben Sie einen validen Ort ein!';
         }
-        if (empty($param['land']) || !isset($param['land']) || strlen(trim($param['land'])) == 0) {
-            $result['error'] = 'Bitte geben Sie einen validen Ort ein!';
+        if (empty($param['country']) || !isset($param['country']) || strlen(trim($param['country'])) == 0) {
+            $result['error'] = 'Bitte geben Sie einen valides Land ein!';
         }
         if (empty($person['email']) || strlen(trim($person['email'])) == 0 || !filter_var($this->test_input($person["email"]), FILTER_VALIDATE_EMAIL)) {
             $result['error'] = 'Bitte geben Sie eine valide E-Mail ein!';
@@ -87,13 +87,12 @@ class profileLogic{
             return $result;
         }
         //JS-Injection Protection
-        $vorname = htmlspecialchars($person['vorname'], ENT_QUOTES);
-        $nachname = htmlspecialchars($person['nachname'], ENT_QUOTES);
-        $adresse = htmlspecialchars($person['addresse'], ENT_QUOTES);
-        $adresse2 = htmlspecialchars($person['addresse2'], ENT_QUOTES);
-        $plz = htmlspecialchars($person['plz'], ENT_QUOTES);
-        $ort = htmlspecialchars($person['ort'], ENT_QUOTES);
-        $land = htmlspecialchars($person['land'], ENT_QUOTES);
+        $firstName = htmlspecialchars($person['firstName'], ENT_QUOTES);
+        $lastName = htmlspecialchars($person['lastName'], ENT_QUOTES);
+        $address = htmlspecialchars($person['address'], ENT_QUOTES);
+        $postcode = htmlspecialchars($person['postcode'], ENT_QUOTES);
+        $city = htmlspecialchars($person['city'], ENT_QUOTES);
+        $country = htmlspecialchars($person['country'], ENT_QUOTES);
         $email = htmlspecialchars($person['email'], ENT_QUOTES);
         $uname = htmlspecialchars($person['username'], ENT_QUOTES);
         $password = htmlspecialchars(password_hash($person['password'], PASSWORD_DEFAULT), ENT_QUOTES);
@@ -104,14 +103,14 @@ class profileLogic{
         }
 
         // Der neue User wird in die Datenbank hinzugefügt, wenn es nicht bereits einen User mit demselben Usernamen gibt.
-        $sql = 'INSERT INTO `users` (`vorname`, `nachname`, `adresse`, `adresse2`, `ort`, `plz`, `land`, `username`, `password`, `email`) 
-        SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+        $sql = 'INSERT INTO `users` (`vorname`, `nachname`, `adresse`, `ort`, `plz`, `land`, `username`, `password`, `email`) 
+        SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
         FROM DUAL
         WHERE NOT EXISTS (SELECT * FROM `users` WHERE `username` = ?)';
 
 
         $stmt = $this->dh->db_obj->prepare($sql);
-        $stmt->bind_param('ssssssssss', $vorname, $nachname, $adresse, $adresse2, $ort, $plz, $land, $uname, $password, $email);
+        $stmt->bind_param('ssssssssss', $firstName, $lastName, $address, $city, $postcode, $country, $uname, $password, $email, $uname);
         // Wenn der Benutzer erfolgreich in die Datenbank hinzugefügt wurde, dass erscheint die Meldung, dass ein/e neue/r BenutzerIn erstellt wurde
         // eine entsprechende Meldung erscheint. Andernfalls bedeutet es dass der eingegebene Username bereits existiert und diese Meldunge erscheint auch.
         // if executed and a row affected return success message, else return error message
@@ -137,8 +136,8 @@ class profileLogic{
     {
         // userinput und password sind die angegebenen Daten
         $result = array();
-        $userInput = $param['loginEmail'];
-        $password = $param['loginPassword'];
+        $userInput = $param['emailInput'];
+        $password = $param['passwordInput'];
         $active = 1;
         // wenn etwas mit der C onnection nicht in Ordnung ist, erscheint diese Meldung
         if (!$this->dh->checkConnection()) {
@@ -166,7 +165,7 @@ class profileLogic{
             if ($user->num_rows == 1) {
                 $row = $user->fetch_assoc();
                 // Nun wird pberüprüft, ob das eingegebene Passwort korrekt ist
-                if (password_verify($password, $row['password'])) {
+                if (password_verify($password, $row['passwordInput'])) {
                     $result['success'] = 'Login erfolgreich, willkommen ' . $row['username'] . '!';
                     $result['username'] = $row['username'];
                     $result['admin'] = $row['admin'];
@@ -176,15 +175,15 @@ class profileLogic{
                     // Der session['name'] wird zugeordnet
                     $_SESSION['username'] = $row['username'];
                     $_SESSION['admin'] = $row['admin'];
-                    // wenn das rememberLogin angeklickt wurde, dann wird entweder ein 1h cookie oder ein 30 Tage cookie gesetzt
-                    if (isset($param['rememberLogin']) && $param['rememberLogin']) {
+                    // wenn das rememberCheck angeklickt wurde, dann wird entweder ein 1h cookie oder ein 30 Tage cookie gesetzt
+                    if (isset($param['rememberCheck']) && $param['rememberCheck']) {
                         // 30-Tage Cookie wenn Login merken
-                        setcookie('rememberLogin', true, time() + (86400 * 30), '/');
+                        setcookie('rememberCheck', true, time() + (86400 * 30), '/');
                         setcookie('username', $row['username'], time() + (86400 * 30), '/');
                         setcookie('admin', $row['admin'], time() + (86400 * 30), '/');
                     } else {
                         // 1-Stunde Cookie wenn nicht Login merken für Benutzerfreundlichkeit
-                        setcookie('rememberLogin', true, time() + 3600, '/');
+                        setcookie('rememberCheck', true, time() + 3600, '/');
                         setcookie('username', $row['username'], time() + 3600, '/');
                         setcookie('admin', $row['admin'], time() + 3600, '/');
                     }
@@ -352,14 +351,14 @@ class profileLogic{
             );
             // Der neue Cookie wird gesetzt
             if ($stmtUpdate->execute() && $stmtUpdate->affected_rows > 0) {
-                if (isset($_COOKIE['rememberLogin']) && $_COOKIE['rememberLogin']) {
+                if (isset($_COOKIE['rememberCheck']) && $_COOKIE['rememberCheck']) {
                     // 30-Tage Cookie
-                    setcookie('rememberLogin', true, time() + (86400 * 30), '/');
+                    setcookie('rememberCheck', true, time() + (86400 * 30), '/');
                     setcookie('username', $data['username'], time() + (86400 * 30), '/');
                     setcookie('admin', $_COOKIE['admin'], time() + (86400 * 30), '/');
                 } else {
                     // 1-Stune Cookie
-                    setcookie('rememberLogin', true, time() + 3600, '/');
+                    setcookie('rememberCheck', true, time() + 3600, '/');
                     setcookie('username', $data['username'], time() + 3600, '/');
                     setcookie('admin', $_COOKIE['admin'], time() + 3600, '/');
                 }
@@ -379,8 +378,8 @@ class profileLogic{
         if (isset($_SESSION['username'])) {
             session_destroy();
             // wir ziehen die Zeit vom cookie ab und somit läuft der cookie ab
-            if (isset($_COOKIE['rememberLogin'])) {
-                setcookie('rememberLogin', '', time() - 3600, '/');
+            if (isset($_COOKIE['rememberCheck'])) {
+                setcookie('rememberCheck', '', time() - 3600, '/');
             }
             if (isset($_COOKIE['username'])) {
                 setcookie('username', '', time() - 3600, '/');

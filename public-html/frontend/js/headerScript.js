@@ -93,7 +93,7 @@ $(document).ready(function() {
 
 function liveSearch(query) {
     $.ajax({
-        url: '../../backend/logic/requestHandler.php',
+        url: '../../backend/logic/queryLogic.php',
         type: 'GET',
         data: { method: "searchProducts", query: query },
         success: function(data) {
