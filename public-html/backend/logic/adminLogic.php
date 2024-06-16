@@ -190,7 +190,7 @@ class adminLogic
         a.name AS product_name
         FROM receipt r
         JOIN orders ol ON r.id = ol.receipt_id
-        JOIN artikel a ON ol.product_id = p.id
+        JOIN artikel a ON ol.a_id = p.id
         WHERE r.id = ?;";
         $stmt = $this->dh->db_obj->prepare($sql);
         $stmt->bind_param('i', $param);
@@ -214,6 +214,238 @@ class adminLogic
 
         $stmt->close();
 
+        return $result;
+    }
+    
+    // Methode zum Ändern einer Bestellposition
+    public function changeOrderLine($param)
+    {
+        $result = array();
+        $ordersID = $param['ordersID'];
+        $receiptID = $param['receiptID'];
+
+        // Verbindung zur DB testen
+        if (!$this->dh->checkConnection()) {
+            $result["error"] = "Versuchen Sie es später erneut!";
+            return $result;
+        }
+
+        // Update bzw. Delete Query, je nach dem ob Bestellposition mehr als 1 Produkt beinhaltet
+        $stmtUpdateOrDelete = $this->dh->db_obj->prepare("
+        IF (SELECT anzahl FROM `orders` WHERE `id` = ?) > 1
+        THEN
+            UPDATE `orders` SET `anzahl` = `anzahl` - 1 WHERE `id` = ?;
+        ELSE
+            DELETE FROM `orderlines` WHERE `id` = ?;
+        END IF;
+        ");
+        $stmtUpdateOrDelete->bind_param("iii", $ordersID, $ordersID, $ordersID);
+        if ($stmtUpdateOrDelete->execute()) {
+            // Checken ob Rechnung noch vorhanden, denn falls die letzte Bestellposition gelöscht wurde vorher
+            // dann wird ein Trigger (siehe SQL-Datei) in der DB ausgeführt welcher automatisch die Zeile 
+            // in der Tabelle `receipts` löscht
+            $stmtCheckReceipt = $this->dh->db_obj->prepare("SELECT COUNT(*) FROM `receipt` WHERE `id` = ?");
+            $stmtCheckReceipt->bind_param("i", $receiptID);
+            if ($stmtCheckReceipt->execute()) {
+                $queryResult = $stmtCheckReceipt->get_result();
+                $receiptExists = $queryResult->fetch_row()[0];
+                // Je nachdem dann die Antwort mitgeben
+                if ($receiptExists === 0) {
+                    $result['lastProduct'] = "Bestellung erfolgreich gelöscht!";
+                } else {
+                    $result['success'] = "Produkt erfolgreich von Bestellung entfernt!";
+                }
+            }
+            
+            $stmtCheckReceipt->close();
+        } else {
+            $result["error"] = "Produkt konnte nicht von Bestellung entfernt werden!";
+        }
+        
+        $stmtUpdateOrDelete->close();
+        return $result;
+    }
+
+    // Methode zum Erstellen eines Produktes
+    public function createProduct()
+    {
+        $result = array();
+        $param = $_POST;
+        $category = $param['category'];
+        $productName = $param['productName'];
+        $price = $param['price'];
+        $gender = $param['gender'];
+        $size = $param['size'];
+        $color = $param['color'];
+        
+        // Validierung
+        if (empty($category) || empty($productName) || empty($price) || empty($gender) || empty($size) || empty($color)) {
+            $result['error'] = 'Bitte füllen Sie alle Felder aus!';
+            return $result;
+        }
+
+        if (!is_numeric($price) ||  $price < 0) {
+            $result['error'] = 'Preis muss valide Zahl sein!';
+            return $result;
+        }
+
+        if (!isset($_FILES['picture']) || $_FILES['picture']['size'] <= 0) {
+            $result['error'] = 'Bitte wählen Sie ein Bild für das Produkt aus!';
+            return $result;
+        }
+
+        $picture = $_FILES['picture'];
+        $tmp_path = $picture['tmp_name'];
+        $fileExtension = pathinfo($picture['name'], PATHINFO_EXTENSION);
+
+        // Validieren ob Bild
+        $allowedExtensions = array('jpg', 'jpeg', 'png');
+        if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+            $result['error'] = 'Ungültige Dateierweiterung! Nur JPG, JPEG und PNG sind erlaubt.';
+            return $result;
+        }
+
+        // Bildpfad vorbereiten
+        $filename = $productName . '.jpg';
+        $actual_path = "../../backend/data/pictures/products/" . $filename;
+
+        // Verbindung zur DB testen
+        if (!$this->dh->checkConnection()) {
+            $result['error'] = 'Versuchen Sie es später erneut!';
+            return $result;
+        }
+
+        // Query zum Erstellen des Produktes in der DB  
+        $sql = 'INSERT INTO `products` (`category` ,`name`, `price`, `gender`,`size`, `color`)
+        VALUES (?, ?, ?, ?, ?, ?)';
+        $stmt = $this->dh->db_obj->prepare($sql);
+        $stmt->bind_param('ssssss', $category, $productName, $price, $gender, $size, $color);
+
+        // Wenn Produkt in DB erstellt und Bild gespeichert wurde im Pfad dann im resukt-Array mitgeben
+        if ($stmt->execute() && $stmt->affected_rows > 0 && move_uploaded_file($tmp_path, $actual_path)) {
+            $result['success'] = 'Produkt erfolgreich hinzugefügt!';
+        } else {
+            $result['error'] = 'Fehler beim Erstellen des Produkts!';
+        }
+
+        $stmt->close();
+        return $result;
+    }
+
+    // Methode zum Aktualisieren eines Produktes
+    public function updateProduct()
+    {
+        $result = array();
+        $param = $_POST;
+        $productID = $param['productID'];
+        $category = $param['category'];
+        $productName = $param['productName'];
+        $price = floatval($param['price']);
+        $description = $param['description'];
+        $currentPicturePath = "../" . $param['currentPicture'];
+        $gender = $param['gender'];
+        $size = $param['size'];
+        $color = $param['color'];
+        
+
+        // Validierung
+        if (empty($category) || empty($productName) || empty($price) || empty($gender) || empty($size) || empty($color)) {
+            $result['error'] = 'Bitte füllen Sie alle Felder aus!';
+            return $result;
+        }
+
+        if (!is_numeric($price) || $price < 0) {
+            $result['error'] = 'Preis muss valide Zahl sein!';
+            return $result;
+        }
+
+        // Verbindung zur DB testen
+        if (!$this->dh->checkConnection()) {
+            $result['error'] = 'Versuchen Sie es später erneut!';
+            return $result;
+        }
+
+        $databaseUpdated = false;
+        $pictureMoved = false;
+
+        // Wenn auch ein Bild mitgegeben wurde dann wird validiert und das Bild gespeichert
+        // ansonsten das existierende Bild umbenannt
+        if (isset($_FILES['picture']) && $_FILES['picture']['size'] > 0) {
+            $picture = $_FILES['picture'];
+            $tmpPath = $picture['tmp_name'];
+            $fileExtension = pathinfo($picture['name'], PATHINFO_EXTENSION);
+
+            $allowedExtensions = array('jpg', 'jpeg', 'png');
+            if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+                $result['error'] = 'Ungültige Dateierweiterung! Nur JPG, JPEG und PNG sind erlaubt.';
+                return $result;
+            }
+
+            $newPictureFilename = $productName . '.jpg';
+            $newPicturePath = "../../backend/data/pictures/products/" . $newPictureFilename;
+            move_uploaded_file($tmpPath, $newPicturePath);
+            $pictureMoved = true;
+        } else {
+            $renamedPicturePath = "../../backend/data/pictures/products/" . $productName . ".jpg";
+            if (!rename($currentPicturePath, $renamedPicturePath)) {
+                $result['error'] = 'Fehler beim Aktualisieren des Bildnamens!';
+                return $result;
+            }
+        }
+
+        // Update-Query zum Ändern der Produktdaten
+        $sql = 'UPDATE `artikel` SET `category` = ?, `name` = ?, `preis` = ?, `color` = ?, `gender` = ?, `size` = ? WHERE `id` = ?';
+        $stmt = $this->dh->db_obj->prepare($sql);
+        $stmt->bind_param('ssdsssi', $category, $productName, $price, $color, $gender, $size, $productID);
+
+        if ($stmt->execute()) {
+            // Wenn tatsächlich Daten in der DB geändert wurden
+            if ($stmt->affected_rows > 0) {
+                $databaseUpdated = true;
+            }
+        } else {
+            $result['error'] = 'Fehler beim Aktualisieren des Produkts!';
+            $stmt->close();
+            return $result;
+        }
+
+        $stmt->close();
+
+        // Wenn Daten in der DB oder das Bild geändert bzw umbenannt wurde
+        // dann teile das mit, da man ja das Bild nicht ändern muss
+        if ($databaseUpdated || $pictureMoved) {
+            $result['success'] = 'Produkt erfolgreich aktualisiert!';
+        } else {
+            $result['error'] = 'Daten bereits aktuell!';
+        }
+
+        return $result;
+    }
+    // Methode zum Löschen eines Produktes
+    public function deleteProduct($param)
+    {
+        $result = array();
+        $id = $param['id'];
+        $currentPicturePath = "../" . $param['currentPicture'];
+
+        // Verbindung zur DB testen
+        if (!$this->dh->checkConnection()) {
+            $result["error"] = "Versuchen Sie es später erneut!";
+            return $result;
+        }
+
+        // Query zum Löschend des Produktes in der DB
+        $stmt = $this->dh->db_obj->prepare("DELETE FROM `artikel` WHERE `id` = ?");
+        $stmt->bind_param("i", $id);
+        // Wenn die Daten gelöscht wurden und das Bild aus dem Ordner der Produktbilder gelöscht wurde
+        // dann teile das mit
+        if ($stmt->execute() && unlink($currentPicturePath)) {
+            $result['success'] = "Produkt wurde erfolgreich gelöscht";
+        } else {
+            $result["error"] = "Produkt konnte nicht gelöscht werden!";
+        }
+
+        $stmt->close();
         return $result;
     }
 }

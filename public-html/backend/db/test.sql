@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 15. Jun 2024 um 16:56
+-- Erstellungszeit: 16. Jun 2024 um 17:28
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -61,10 +61,11 @@ INSERT INTO `artikel` (`art_num`, `name`, `gender`, `price`, `size`, `color`, `c
 --
 
 CREATE TABLE `orders` (
-  `user_id` int(10) NOT NULL,
   `a_id` int(10) NOT NULL,
   `r_id` int(10) NOT NULL,
-  `id` int(11) NOT NULL
+  `id` int(11) NOT NULL,
+  `preis` float NOT NULL,
+  `anzahl` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -75,11 +76,13 @@ CREATE TABLE `orders` (
 
 CREATE TABLE `receipt` (
   `id` int(10) NOT NULL,
-  `timestamp` datetime NOT NULL,
+  `datum` datetime NOT NULL,
   `user_id` int(10) NOT NULL,
   `total` int(10) NOT NULL,
-  `status` varchar(10) NOT NULL,
-  `artikel` varchar(20) NOT NULL
+  `ort` varchar(20) NOT NULL,
+  `land` varchar(20) NOT NULL,
+  `plz` varchar(6) NOT NULL,
+  `adresse` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -130,7 +133,6 @@ ALTER TABLE `artikel`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `test` (`user_id`),
   ADD KEY `r_id` (`r_id`),
   ADD KEY `a_id` (`a_id`);
 
@@ -178,14 +180,7 @@ ALTER TABLE `users`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`r_id`) REFERENCES `receipt` (`id`),
-  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`a_id`) REFERENCES `artikel` (`art_num`),
-  ADD CONSTRAINT `test` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
-
---
--- Constraints der Tabelle `receipt`
---
-ALTER TABLE `receipt`
-  ADD CONSTRAINT `receipt_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `orders` (`user_id`);
+  ADD CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`a_id`) REFERENCES `artikel` (`art_num`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
