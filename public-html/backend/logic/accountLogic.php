@@ -218,7 +218,7 @@ class accountLogic{
              return;
          }
          // Man holt sich die Daten des Users aus der Datenbank
-         $sql = 'SELECT `vorname`, `nachname`, `adresse`, `plz`, `ort`, `email`, `username`
+         $sql = 'SELECT `vorname`, `nachname`, `adresse`, `plz`, `ort`, `land`, `email`, `username`
          FROM `users` WHERE `username` = ?';
          $stmt = $this->dh->db_obj->prepare($sql);
          $stmt->bind_param('s', $param);
