@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 16. Jun 2024 um 17:28
+-- Erstellungszeit: 17. Jun 2024 um 21:32
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -101,7 +101,7 @@ CREATE TABLE `users` (
   `plz` varchar(6) NOT NULL,
   `land` varchar(3) NOT NULL,
   `username` varchar(20) NOT NULL,
-  `password` varchar(20) NOT NULL,
+  `password` varchar(250) NOT NULL,
   `isAdmin` tinyint(1) DEFAULT NULL,
   `email` varchar(20) NOT NULL,
   `aktiv` tinyint(1) NOT NULL DEFAULT 1
@@ -116,7 +116,12 @@ INSERT INTO `users` (`id`, `vorname`, `nachname`, `adresse`, `adresse2`, `ort`, 
 (11, 'test', 'test', 'test', 'test', 'test', '213', 'AT', 'test', '$2y$10$5a7ccNp0YM8Yy', NULL, 'testtesttest@gmail.c', 0),
 (12, 'final', 'test', 'test', 'test', 'test', '1200', 'AT', 'test', '$2y$10$IGl3vLgWF0qHQ', NULL, 'correctEmailFormat@g', 0),
 (13, 'abc', 'abc', 'abc', 'avb', 'wien', '1200', 'AT', 'test', '$2y$10$2YLgOYESydQYn', NULL, 'realEmail@gmail.com', 0),
-(14, 'test', 'test', 'test', 'test', 'test', '1200', 'AT', 'newUser', '$2y$10$3fLf65SdATM7M', NULL, 'newEmail@gmail.com', 0);
+(14, 'test', 'test', 'test', 'test', 'test', '1200', 'AT', 'newUser', '$2y$10$3fLf65SdATM7M', NULL, 'newEmail@gmail.com', 0),
+(15, 'lukas', 'huber', 'leithastraße', NULL, 'Wien', '1200', 'AT', 'lukashuber2020', '$2y$10$2wy.DNL/fEfRj', NULL, 'lukastest@gmail.com', 1),
+(16, 'test', 'test', 'test', NULL, 'test', '2121', 'CZ', 'testee22', '$2y$10$.q.2FIUJKb95I', NULL, 'ttee@gmail.com', 1),
+(17, 'testee', 'tester', 'teststreet', NULL, 'testplace', '123123', 'LV', 'testee23', '$2y$10$uqxy1aQghXUm8', 0, 'testee23@gmail.com', 1),
+(18, 'test', 'test', 'test', NULL, 'test', '1234', 'AT', 'testtest', '$2y$10$mnWqJb09gdoiE', 0, 'newTest@gmail.com', 1),
+(19, 'newtest', 'test', 'test', NULL, 'tettete', '1233', 'AT', 'testing1', '$2y$10$Qwm6h3562uf4u.kuyolidOsytl4vRwqQOVSvtbWAukYhvQxJiFu2C', 0, 'reeeee@gmail.com', 1);
 
 --
 -- Indizes der exportierten Tabellen
@@ -169,7 +174,7 @@ ALTER TABLE `receipt`
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Constraints der exportierten Tabellen

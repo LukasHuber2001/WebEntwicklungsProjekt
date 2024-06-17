@@ -55,12 +55,6 @@ class businessLogic
             case 'loadProductByID':
                 $res = $this->productLogic->loadProductByID($param);
                 break;
-            case 'saveCart':
-                $res = $this->orderLogic->saveCart($param);
-                break;
-            case 'loadCart':
-                $res = $this->orderLogic->loadCart();
-                break;
             case 'getOrders':
                 $res = $this->orderLogic->getOrders($param);
                 break;

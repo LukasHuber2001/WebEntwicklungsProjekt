@@ -10,6 +10,7 @@ $(document).ready(function() {
             $("#cart-icon").remove(); // Remove the search container for all pages except index.html
         }
     });
+    
 
     $("footer").load("../sites/inc/footer.html");
 });
