@@ -83,12 +83,14 @@ $(document).ready(function() {
             if (cart.length === 0) {
                 showEmptyCartPopup();
             } else {
-                saveCartToServer(function() {
-                    window.location.href = 'checkout.html';
-                });
+                saveCartToSessionStorage();
+                window.location.href = 'checkout.html';
             }
         }
     });
+
+    // Load the cart from sessionStorage
+    loadCartFromSessionStorage();
 });
 
 function liveSearch(query) {
@@ -116,7 +118,7 @@ function liveSearch(query) {
     });
 }
 
-const cart = [];
+const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
 
 // Function to add new products to cart
 function addToCart(product) {
@@ -129,7 +131,7 @@ function addToCart(product) {
     }
 
     updateCartDisplay();
-    localStorage.setItem('cart', JSON.stringify(cart));
+    sessionStorage.setItem('cart', JSON.stringify(cart));
 }
 
 // Update cart, empties items each load, calculates total price, and displays products
@@ -164,7 +166,7 @@ function updateCartDisplay() {
     // Updates the counter for the cart icon in the navbar
     $('#cart-count').text(cart.length);
 
-    localStorage.setItem('cart', JSON.stringify(cart));
+    sessionStorage.setItem('cart', JSON.stringify(cart));
 }
 
 // Handles the quantity fields
@@ -192,36 +194,15 @@ function deleteCartItem(event) {
     updateCartDisplay();
 }
 
-// Save cart to server via AJAX
-function saveCartToServer(callback) {
-    $.ajax({
-        url: '../../backend/logic/requestHandler.php',
-        type: 'POST',
-        data: { method: "saveCart", cart: JSON.stringify(cart) },
-        success: function(response) {
-            console.log('Cart saved to server:', response);
-            if (callback) callback();
-        },
-        error: function(xhr, status, error) {
-            console.error('Error saving cart:', error);
-        }
-    });
+// Save cart to sessionStorage
+function saveCartToSessionStorage() {
+    sessionStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Function to load cart from server
-function loadCartFromServer(callback) {
-    $.ajax({
-        url: '../../backend/logic/requestHandler.php',
-        type: 'GET',
-        data: { method: 'loadCart' },
-        success: function(data) {
-            const cart = JSON.parse(data) || [];
-            displayCartItems(cart);
-            if (callback) callback(cart);
-        },
-        error: function(xhr, status, error) {
-            console.error('Error loading cart:', error);
-        }
-    });
+// Function to load cart from sessionStorage
+function loadCartFromSessionStorage() {
+    const savedCart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    cart.length = 0; // Clear the current cart array
+    savedCart.forEach(item => cart.push(item)); // Copy items from savedCart to cart
+    updateCartDisplay();
 }
-

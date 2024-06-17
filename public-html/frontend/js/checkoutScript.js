@@ -1,11 +1,14 @@
 $(document).ready(function() {
-    // Load cart items from the server
-    loadCartFromServer();
+    // Load cart items from sessionStorage
+    loadCartFromSessionStorage();
 
     // Pay Now button click event
     $('#pay-now').on('click', async function() {
-        // Clear cart on the server
-        clearCartOnServer();
+        // Process the order
+        await processOrder();
+
+        // Clear cart in sessionStorage
+        clearCartInSessionStorage();
 
         // Generate and save receipt
         const receiptFileName = await generateAndSaveReceipt();
@@ -29,125 +32,14 @@ $(document).ready(function() {
     });
 });
 
-function loadCartFromServer() {
-    $.ajax({
-        url: '../../backend/logic/cartHandler.php',
-        type: 'GET',
-        data: { method: 'loadCart' },
-        success: function(data) {
-            const cart = JSON.parse(data) || [];
-            displayCartItems(cart);
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    });
+function clearCartInSessionStorage() {
+    sessionStorage.removeItem('cart');
+    console.log('Cart cleared in sessionStorage');
 }
 
-function clearCartOnServer() {
-    $.ajax({
-        url: '../../backend/logic/cartHandler.php',
-        type: 'POST',
-        data: { method: 'saveCart', cart: JSON.stringify([]) },
-        success: function(data) {
-            console.log('Cart cleared on server');
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
-    });
-}
-
-async function generateAndSaveReceipt() {
-    const { jsPDF } = window.jspdf;
-
-    // Placeholder company address (unchanged)
-    const companyAddress = "Feel Good Inc. & Co KG\nHochstädtplatz 6\n1200 Wien\nAUSTRIA";
-
-    // Fetch customer data from JSON
-    const response = await fetch('../../backend/data/users.json');
-    const customers = await response.json();
-
-    const customerId = 11; // Placeholder customer ID
-    const customer = customers.find(c => c.id == customerId);
-
-    if (!customer) {
-        console.error('Customer not found');
-        return;
-    }
-
-    const buyerAddress = `${customer.vorname} ${customer.nachname}\n${customer.adresse}\n${customer.ort}, ${customer.plz}`;
-    const invoiceNumber = 1; // Placeholder invoice number
-    const currDate = "01.01.2000"; // Placeholder current date
-
-    // Example products (mocking)
-    const products = [
-        { name: "Product 1", price: 10.0, quantity: 2 },
-        { name: "Product 2", price: 20.0, quantity: 1 },
-    ];
-
-    // Create new jsPDF instance
-    const doc = new jsPDF();
-
-    // Company address, right-aligned
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const lines = companyAddress.split('\n');
-    lines.forEach((line, index) => {
-        const textWidth = doc.getTextWidth(line);
-        doc.text(line, pageWidth - textWidth - 10, 10 + (index * 10));
-    });
-
-    // Customer address
-    doc.setFont('helvetica', 'bold');
-    doc.text("BILLED TO:", 10, 50);
-    doc.setFont('helvetica', 'normal');
-    const buyerLines = buyerAddress.split('\n');
-    buyerLines.forEach((line, index) => {
-        doc.text(line, 10, 60 + (index * 10));
-    });
-
-    // Invoice number, right-aligned
-    const dateText = `Date: ${currDate}`;
-    const dateTextWidth = doc.getTextWidth(dateText);
-    doc.text(dateText, pageWidth - dateTextWidth - 10, 90);
-    const invoiceText = `Invoice Number: ${invoiceNumber}`;
-    const invoiceTextWidth = doc.getTextWidth(invoiceText);
-    doc.text(invoiceText, pageWidth - invoiceTextWidth - 10, 100);
-
-    // Product list
-    let y = 130;
-    let total = 0;
-    products.forEach(product => {
-        const totalProductPrice = product.price * product.quantity;
-        doc.text(`${product.name}: $${product.price} x ${product.quantity} = $${totalProductPrice.toFixed(2)}`, 10, y);
-        y += 10;
-        total += totalProductPrice;
-    });
-
-    // Total price
-    doc.text(`Total: $${total.toFixed(2)}`, 10, y + 10);
-
-    // Save the file on the server
-    const pdfBlob = doc.output('blob');
-    const formData = new FormData();
-    formData.append('pdf', pdfBlob, `ZenMonkey_receiptNr${invoiceNumber}.pdf`);
-
-    try {
-        const response = await fetch('../../backend/logic/saveReceipts.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to save receipt on server.');
-        }
-
-        // Return the filename for client-side download
-        return `ZenMonkey_receiptNr${invoiceNumber}.pdf`;
-    } catch (error) {
-        console.error('Error saving receipt:', error);
-        return null;
-    }
+function loadCartFromSessionStorage() {
+    const cart = JSON.parse(sessionStorage.getItem('cart')) || [];
+    displayCartItems(cart);
 }
 
 function displayCartItems(cart) {
@@ -178,10 +70,11 @@ function displayCartItems(cart) {
 
     $('#checkout-total-price').text(`€${totalPrice.toFixed(2)}`);
 
+    // Event listeners for quantity changes and delete buttons
     $('.quantity-input').on('change', function() {
         const artNum = parseInt($(this).data('art-num'));
         const newQuantity = parseInt($(this).val());
-        updateCartQuantity(artNum, newQuantity);
+        updateCartItemQuantity(artNum, newQuantity);
     });
 
     $('.delete-btn').on('click', function() {
@@ -190,35 +83,153 @@ function displayCartItems(cart) {
     });
 }
 
-function updateCartQuantity(artNum, newQuantity) {
-    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+function updateCartItemQuantity(artNum, newQuantity) {
+    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
     const cartItem = cart.find(item => item.art_num === artNum);
 
     if (cartItem && newQuantity >= 1) {
         cartItem.quantity = newQuantity;
     }
 
-    saveCartToServer();
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems(cart);
 }
 
 function deleteCartItem(artNum) {
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cart = JSON.parse(sessionStorage.getItem('cart')) || [];
     cart = cart.filter(item => item.art_num !== artNum);
 
-    saveCartToServer();
+    sessionStorage.setItem('cart', JSON.stringify(cart));
+    displayCartItems(cart);
 }
 
-function saveCartToServer(callback) {
-    $.ajax({
-        url: '../../backend/logic/cartHandler.php',
-        type: 'POST',
-        data: { method: 'saveCart', cart: JSON.stringify(cart) },
-        success: function(data) {
-            displayCartItems(cart);
-            if (callback) callback();
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
-        }
+async function processOrder() {
+    let username = getCookie('username');
+    let orderData = {
+        username: username,
+        cartItems: []
+    };
+    let myCart = JSON.parse(sessionStorage.getItem('cart'));
+    let cartItems = myCart.map(item => {
+        return {
+            id: item.art_num,
+            price: item.price,
+            quantity: item.quantity
+        };
     });
+    orderData.cartItems = cartItems;
+
+    // Send order data to server-side
+    try {
+        const response = await $.ajax({
+            url: '../../backend/logic/requestHandler.php',
+            type: 'POST',
+            data: { method: "processOrder", param: JSON.stringify(orderData) },
+            success: function(data) {
+                return data;
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error:", error);
+                throw new Error("Failed to process order on server.");
+            }
+        });
+
+        console.log('Order processed:', response);
+    } catch (error) {
+        console.error('Error processing order:', error);
+    }
+}
+
+async function generateAndSaveReceipt() {
+    const { jsPDF } = window.jspdf;
+
+    const companyAddress = "Feel Good Inc. & Co KG\nHochstädtplatz 6\n1200 Wien\nAUSTRIA";
+
+    // Fetch customer data from JSON
+    const response = await fetch('../../backend/data/users.json');
+    const customers = await response.json();
+
+    const customerId = 11; // Placeholder customer ID
+    const customer = customers.find(c => c.id == customerId);
+
+    if (!customer) {
+        console.error('Customer not found');
+        return;
+    }
+
+    const buyerAddress = `${customer.vorname} ${customer.nachname}\n${customer.adresse}\n${customer.ort}, ${customer.plz}`;
+    const invoiceNumber = 1; // Placeholder invoice number
+    const currDate = "01.01.2000"; // Placeholder current date
+
+    // Example products (mocking)
+    const products = [
+        { name: "Product 1", price: 10.0, quantity: 2 },
+        { name: "Product 2", price: 20.0, quantity: 1 },
+    ];
+
+    const doc = new jsPDF();
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const lines = companyAddress.split('\n');
+    lines.forEach((line, index) => {
+        const textWidth = doc.getTextWidth(line);
+        doc.text(line, pageWidth - textWidth - 10, 10 + (index * 10));
+    });
+
+    doc.setFont('helvetica', 'bold');
+    doc.text("BILLED TO:", 10, 50);
+    doc.setFont('helvetica', 'normal');
+    const buyerLines = buyerAddress.split('\n');
+    buyerLines.forEach((line, index) => {
+        doc.text(line, 10, 60 + (index * 10));
+    });
+
+    const dateText = `Date: ${currDate}`;
+    const dateTextWidth = doc.getTextWidth(dateText);
+    doc.text(dateText, pageWidth - dateTextWidth - 10, 90);
+    const invoiceText = `Invoice Number: ${invoiceNumber}`;
+    const invoiceTextWidth = doc.getTextWidth(invoiceText);
+    doc.text(invoiceText, pageWidth - invoiceTextWidth - 10, 100);
+
+    let total = 0;
+    let y = 130;
+    products.forEach(product => {
+        const totalProductPrice = product.price * product.quantity;
+        doc.text(`${product.name}: $${product.price} x ${product.quantity} = $${totalProductPrice.toFixed(2)}`, 10, y);
+        y += 10;
+        total += totalProductPrice;
+    });
+
+    doc.text(`Total: $${total.toFixed(2)}`, 10, y + 10);
+
+    const pdfBlob = doc.output('blob');
+    const formData = new FormData();
+    formData.append('pdf', pdfBlob, `ZenMonkey_receiptNr${invoiceNumber}.pdf`);
+
+    try {
+        const response = await fetch('../../backend/logic/saveReceipts.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save receipt on server.');
+        }
+
+        return `ZenMonkey_receiptNr${invoiceNumber}.pdf`;
+    } catch (error) {
+        console.error('Error saving receipt:', error);
+        return null;
+    }
+}
+
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
 }
