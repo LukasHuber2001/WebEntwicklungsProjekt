@@ -74,7 +74,7 @@ class productLogic
             return $result;
         }
 
-        $stmt = $this->dh->db_obj->prepare("SELECT * FROM `artikel` WHERE `id` = ?");
+        $stmt = $this->dh->db_obj->prepare("SELECT * FROM `artikel` WHERE `art_num` = ?");
         $stmt->bind_param("i", $param);
 
         if ($stmt->execute()) {

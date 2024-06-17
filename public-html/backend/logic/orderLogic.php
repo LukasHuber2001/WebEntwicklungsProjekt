@@ -8,60 +8,30 @@ class orderLogic
         $this->dh = $dh;
     }
 
-    function saveCart($param) {
-        session_start();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $method = $_POST['method'];
-
-            if ($method === 'saveCart') {
-                $cart = json_decode($_POST['cart'], true);
-                $_SESSION['cart'] = $cart;
-                return ['status' => 'success'];
-            }
-        }
-
-        return ['status' => 'error', 'message' => 'Invalid request method or parameters'];
-    }
-
-    function loadCart() {
-        session_start();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-            $method = $_GET['method'];
-
-            if ($method === 'loadCart') {
-                if (isset($_SESSION['cart'])) {
-                    return $_SESSION['cart'];
-                } else {
-                    return [];
-                }
-            }
-        }
-
-        return null; // Handle error case or invalid request
-    }
-
-
     function processOrder($param) //bestellung verarbeiten
     {
         $result = array();
-    
+
         // datenbankverbindung überprüfen
         if (!$this->dh->checkConnection()) {
             $result["error"] = "Versuchen Sie es später erneut!";
             return $result; 
         }
-    
+
         // Start a transaction
         $this->dh->db_obj->begin_transaction(); //Gruppiert einer Reihe von Datenbankoperationen als einen Schritt
-    
+
         //parameter aus $param speichern. 
         $username = $param['username'];
         $cartItems = $param['cartItems'];
+        $address = $param['address'];
+        $postcode = $param['postcode'];
+        $city = $param['city'];
+        
     
-        // userid und Adresse je nach username abfragen
-        $stmt = $this->dh->db_obj->prepare("SELECT id, adresse, plz, ort, land FROM users WHERE username = ?");
+
+        // userid je nach username abfragen
+        $stmt = $this->dh->db_obj->prepare("SELECT `id` FROM `users` WHERE `username` = ?");
         $stmt->bind_param("s", $username);
         if (!$stmt->execute()) {
             $result['error'] = "Fehler bei der Datenbank!";
@@ -71,24 +41,21 @@ class orderLogic
         }
         $queryResult = $stmt->get_result();
         $row = $queryResult->fetch_assoc();
-    
+
         if (!$row) {
             $result['error'] = "Benutzer nicht gefunden!";
             $this->dh->db_obj->rollback();
             $stmt->close();
             return $result;
         }
-    
+
         $user_id = $row['id'];
-        $address = $row['adresse'];
-        $postcode = $row['plz'];
-        $city = $row['ort'];
-        $country = $row['land'];
         $stmt->close();
-    
+
+
         //Rechnung in db einfügen
-        $stmt = $this->dh->db_obj->prepare("INSERT INTO receipt (user_id, adresse, plz, ort, land, datum) VALUES (?, ?, ?, ?, ?, NOW())");
-        $stmt->bind_param("issss", $user_id, $address, $postcode, $city, $country);
+        $stmt = $this->dh->db_obj->prepare("INSERT INTO `receipt` (user_id, adresse, land, plz, ort, datum) VALUES (?, ?, ?, ?, NOW())");
+        $stmt->bind_param("issss", $user_id, $address, $postcode, $city);
         if (!$stmt->execute()) {
             $result['error'] = "Fehler bei der Datenbank!";
             $this->dh->db_obj->rollback();
@@ -96,17 +63,18 @@ class orderLogic
             return $result;
         }
         $receipt_id = $stmt->insert_id;
+
         $stmt->close();
-    
+
         // Orderlines erstellen
         try {
             foreach ($cartItems as $item) {
                 $product_id = $item['id'];
                 $preis = $item['price'];
                 $anzahl = $item['quantity'];
-    
+
                 // Orderlines in db einfügen
-                $stmt = $this->dh->db_obj->prepare("INSERT INTO orders (r_id, a_id, preis, anzahl) VALUES (?, ?, ?, ?)");
+                $stmt = $this->dh->db_obj->prepare("INSERT INTO `orders` (r_id, a_id, preis, anzahl) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("iidi", $receipt_id, $product_id, $preis, $anzahl);
                 if (!$stmt->execute()) {
                     $result['error'] = "Fehler bei der Erstellung der Bestellung!";
@@ -118,16 +86,17 @@ class orderLogic
         } catch (Exception $e) {
             $result['error'] = "Fehler bei der Erstellung der Bestellung!";
             $this->dh->db_obj->rollback();
+            $stmt->close();
             return $result;
         }
         $this->dh->db_obj->commit();
-    
+
         // gibt nachricht zurück
         $result['success'] = 'Bestellung erfolgreich abgeschlossen!';
         $result['receipt'] = $receipt_id;
         return $result;
     }
-        function getOrders($param) //Bestellungen zu einem user aus der db holen
+    function getOrders($param) //Bestellungen zu einem user aus der db holen
     {
         $username = $param['username'];
         $tab = array();
