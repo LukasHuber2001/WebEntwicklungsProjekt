@@ -9,14 +9,14 @@ class businessLogic
     // Initialsieren der Logic-Klassen
     // und des zentralen Data-Handlers
     private $productLogic;
-    private $profileLogic;
+    private $accountLogic;
     private $orderLogic;
     private $adminLogic;
     function __construct()
     {
         $dh = new dataHandler();
         $this->productLogic = new productLogic($dh);
-        $this->profileLogic = new profileLogic($dh);
+        $this->accountLogic = new accountLogic($dh);
         $this->orderLogic = new orderLogic($dh);
         $this->adminLogic = new adminLogic($dh);
         session_start();
@@ -29,22 +29,22 @@ class businessLogic
         $res = array();
         switch ($method) {
             case 'getSessionInfo':
-                $res = $this->profileLogic->getSessionInfo();
+                $res = $this->accountLogic->getSessionInfo();
                 break;
             case 'registerUser':
-                $res = $this->profileLogic->registerUser($param);
+                $res = $this->accountLogic->registerUser($param);
                 break;
             case "loginUser":
-                $res = $this->profileLogic->loginUser($param);
+                $res = $this->accountLogic->loginUser($param);
                 break;
             case 'getProfileData';
-                $res = $this->profileLogic->getProfileData($param);
+                $res = $this->accountLogic->getProfileData($param);
                 break;
             case 'updateUserData';
-                $res = $this->profileLogic->updateUserData($param);
+                $res = $this->accountLogic->updateUserData($param);
                 break;
             case 'logoutUser':
-                $res = $this->profileLogic->logoutUser();
+                $res = $this->accountLogic->logoutUser();
                 break;
             case 'loadAllProducts':
                 $res = $this->productLogic->loadAllProducts();
