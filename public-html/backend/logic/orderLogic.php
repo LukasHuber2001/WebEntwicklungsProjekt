@@ -54,18 +54,8 @@ class orderLogic
 
 
         //Rechnung in db einfügen
-<<<<<<< HEAD
         $stmt = $this->dh->db_obj->prepare("INSERT INTO `receipt` (user_id, adresse, land, plz, ort, datum) VALUES (?, ?, ?, ?, NOW())");
         $stmt->bind_param("issss", $user_id, $address, $postcode, $city);
-=======
-<<<<<<< HEAD
-        $stmt = $this->dh->db_obj->prepare("INSERT INTO `receipt` (user_id, adresse, land, plz, ort, datum) VALUES (?, ?, ?, ?, ?, NOW())");
-        $stmt->bind_param("issss", $user_id, $address, $postcode, $city);
-=======
-        $stmt = $this->dh->db_obj->prepare("INSERT INTO receipt (user_id, adresse, plz, ort, land, datum) VALUES (?, ?, ?, ?, ?, NOW())");
-        $stmt->bind_param("issss", $user_id, $address, $postcode, $city, $country);
->>>>>>> 70c61ea8c9ed9ea97f0b2b8cfe3ce72c80e293d9
->>>>>>> 3cdcbc06c110ffd9b75792b5ede9609fb55c17fe
         if (!$stmt->execute()) {
             $result['error'] = "Fehler bei der Datenbank!";
             $this->dh->db_obj->rollback();
@@ -75,37 +65,16 @@ class orderLogic
         $receipt_id = $stmt->insert_id;
 
         $stmt->close();
-<<<<<<< HEAD
 
-=======
-<<<<<<< HEAD
-
-        // Orders erstellen
-=======
-    
->>>>>>> 3cdcbc06c110ffd9b75792b5ede9609fb55c17fe
         // Orderlines erstellen
->>>>>>> 70c61ea8c9ed9ea97f0b2b8cfe3ce72c80e293d9
         try {
             foreach ($cartItems as $item) {
                 $product_id = $item['id'];
                 $preis = $item['price'];
                 $anzahl = $item['quantity'];
-<<<<<<< HEAD
 
                 // Orderlines in db einfügen
                 $stmt = $this->dh->db_obj->prepare("INSERT INTO `orders` (r_id, a_id, preis, anzahl) VALUES (?, ?, ?, ?)");
-=======
-<<<<<<< HEAD
-
-                // Orders in db einfügen
-                $stmt = $this->dh->db_obj->prepare("INSERT INTO `orders` (r_id, a_id, preis, anzahl) VALUES (?, ?, ?, ?)");
-=======
-    
-                // Orderlines in db einfügen
-                $stmt = $this->dh->db_obj->prepare("INSERT INTO orders (r_id, a_id, preis, anzahl) VALUES (?, ?, ?, ?)");
->>>>>>> 70c61ea8c9ed9ea97f0b2b8cfe3ce72c80e293d9
->>>>>>> 3cdcbc06c110ffd9b75792b5ede9609fb55c17fe
                 $stmt->bind_param("iidi", $receipt_id, $product_id, $preis, $anzahl);
                 if (!$stmt->execute()) {
                     $result['error'] = "Fehler bei der Erstellung der Bestellung!";

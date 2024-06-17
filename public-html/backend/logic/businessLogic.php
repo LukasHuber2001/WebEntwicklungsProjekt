@@ -59,7 +59,7 @@ class businessLogic
                 $res = $this->orderLogic->saveCart($param);
                 break;
             case 'loadCart':
-                $res = $this->orderLogic->loadCart($param);
+                $res = $this->orderLogic->loadCart();
                 break;
             case 'getOrders':
                 $res = $this->orderLogic->getOrders($param);
