@@ -89,7 +89,7 @@ class orderLogic
 
 
         //Rechnung in db einfügen
-        $stmt = $this->dh->db_obj->prepare("INSERT INTO `receipt` (user_id, adresse, land, plz, ort, datum) VALUES (?, ?, ?, ?, NOW())");
+        $stmt = $this->dh->db_obj->prepare("INSERT INTO `receipt` (user_id, adresse, land, plz, ort, datum) VALUES (?, ?, ?, ?, ?, NOW())");
         $stmt->bind_param("issss", $user_id, $address, $postcode, $city);
         if (!$stmt->execute()) {
             $result['error'] = "Fehler bei der Datenbank!";
@@ -101,14 +101,14 @@ class orderLogic
 
         $stmt->close();
 
-        // Orderlines erstellen
+        // Orders erstellen
         try {
             foreach ($cartItems as $item) {
                 $product_id = $item['id'];
                 $preis = $item['price'];
                 $anzahl = $item['quantity'];
 
-                // Orderlines in db einfügen
+                // Orders in db einfügen
                 $stmt = $this->dh->db_obj->prepare("INSERT INTO `orders` (r_id, a_id, preis, anzahl) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("iidi", $receipt_id, $product_id, $preis, $anzahl);
                 if (!$stmt->execute()) {
