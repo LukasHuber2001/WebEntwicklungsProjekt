@@ -2,6 +2,14 @@ $(document).ready(function() {
     // User icon dropdown
     $('.dropdown-toggle').dropdown();
 
+    let username = getCookie('username');
+
+    if(username){
+        document.getElementById("lbl-welcome").innerHTML = "Welcome, " + username + "!";
+    } else{
+        document.getElementById("lbl-welcome").innerHTML = "You are currently not logged in!";
+    }
+
     // Cart icon click listener
     $('#cart-icon').on('click', function() {
         $('#openPopupBtn').trigger('click');
@@ -205,4 +213,14 @@ function loadCartFromSessionStorage() {
     cart.length = 0; // Clear the current cart array
     savedCart.forEach(item => cart.push(item)); // Copy items from savedCart to cart
     updateCartDisplay();
+}
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
 }

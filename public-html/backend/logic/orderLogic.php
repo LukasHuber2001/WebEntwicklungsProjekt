@@ -24,14 +24,11 @@ class orderLogic
         //parameter aus $param speichern. 
         $username = $param['username'];
         $cartItems = $param['cartItems'];
-        $address = $param['address'];
-        $postcode = $param['postcode'];
-        $city = $param['city'];
         
     
 
         // userid je nach username abfragen
-        $stmt = $this->dh->db_obj->prepare("SELECT `id` FROM `users` WHERE `username` = ?");
+        $stmt = $this->dh->db_obj->prepare("SELECT *  FROM `users` WHERE `username` = ?");
         $stmt->bind_param("s", $username);
         if (!$stmt->execute()) {
             $result['error'] = "Fehler bei der Datenbank!";
@@ -50,12 +47,18 @@ class orderLogic
         }
 
         $user_id = $row['id'];
+        $address = $row['adresse'];
+        $postcode = $row['plz'];
+        $city = $row['ort'];
+        $country = $row['land'];
+        $date = '01.01.2000';
+
         $stmt->close();
 
 
         //Rechnung in db einfügen
-        $stmt = $this->dh->db_obj->prepare("INSERT INTO `receipt` (user_id, adresse, land, plz, ort, datum) VALUES (?, ?, ?, ?, NOW())");
-        $stmt->bind_param("issss", $user_id, $address, $postcode, $city);
+        $stmt = $this->dh->db_obj->prepare("INSERT INTO `receipt` (user_id, adresse, land, plz, ort, datum) VALUES (?, ?, ?, ?, ?, NOW())");
+        $stmt->bind_param("issss", $user_id, $address, $country, $postcode, $city);
         if (!$stmt->execute()) {
             $result['error'] = "Fehler bei der Datenbank!";
             $this->dh->db_obj->rollback();
