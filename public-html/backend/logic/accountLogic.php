@@ -137,7 +137,7 @@ class accountLogic{
     {
         // userinput und password sind die angegebenen Daten
         $result = array();
-        $userInput = $param['emailInput'];
+        $userInput = $param['userInput'];
         $password = $param['passwordInput'];
         $active = 1;
         // wenn etwas mit der C onnection nicht in Ordnung ist, erscheint diese Meldung
@@ -166,6 +166,7 @@ class accountLogic{
             if ($user->num_rows == 1) {
                 $row = $user->fetch_assoc();
                 // Nun wird pberüprüft, ob das eingegebene Passwort korrekt ist
+                
                 if (password_verify($password, $row['password'])) {
                     $result['success'] = 'Login erfolgreich, willkommen ' . $row['username'] . '!';
                     $result['username'] = $row['username'];
@@ -190,7 +191,8 @@ class accountLogic{
                     }
                 } else {
                     // Wenn das Passwort nicht korrekt war
-                    $result['error'] = 'Falsches Passwort!';
+                    $result['error'] = 'Falsches Passwort!'.$row['password'].' '.$password;
+
                 }
             } else {
                 // Wenn es keinen Eintrag in der Datenbank gibt, wo username oder email dem entsprechen
