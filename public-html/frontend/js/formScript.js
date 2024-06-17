@@ -1,11 +1,11 @@
 $(document).ready(function () {
     //login function
     $(document).on('click', '#btn-login', function () {
-        let emailInput = $('#emailInput').val().trim();
+        let userInput = $('#userInput').val().trim();
         let passwordInput = $('#passwordInput').val().trim();
     
         //check if email and password are not empty
-        if (emailInput === '') {
+        if (userInput === '') {
             alert('Enter a username or email!', 'warning');
             return;
         }
@@ -21,8 +21,8 @@ $(document).ready(function () {
             url: '../../backend/logic/requestHandler.php',
             data: {
                 method: 'loginUser',
-                param: JSON.stringify({
-                    emailInput: emailInput,
+                param: JSON.stringify({ 
+                    userInput: userInput,
                     passwordInput: passwordInput,
                     rememberCheck: $('#rememberCheck').prop('checked')
                 })

@@ -1,5 +1,5 @@
 <?php
-class profileLogic{
+class accountLogic{
     private $dh;
     // Der Konstruktor
     public function __construct($dh)
@@ -96,6 +96,7 @@ class profileLogic{
         $email = htmlspecialchars($person['email'], ENT_QUOTES);
         $uname = htmlspecialchars($person['username'], ENT_QUOTES);
         $password = htmlspecialchars(password_hash($person['password'], PASSWORD_DEFAULT), ENT_QUOTES);
+        $isAdmin = 0;
 
         if (!$this->dh->checkConnection()) {
             $result['error'] = 'Registrierung fehlgeschlagen, versuchen Sie es später erneut';
@@ -103,14 +104,14 @@ class profileLogic{
         }
 
         // Der neue User wird in die Datenbank hinzugefügt, wenn es nicht bereits einen User mit demselben Usernamen gibt.
-        $sql = 'INSERT INTO `users` (`vorname`, `nachname`, `adresse`, `ort`, `plz`, `land`, `username`, `password`, `email`) 
-        SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?
+        $sql = 'INSERT INTO `users` (`vorname`, `nachname`, `adresse`, `ort`, `plz`, `land`, `username`, `password`, `email`, `isAdmin`) 
+        SELECT ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         FROM DUAL
         WHERE NOT EXISTS (SELECT * FROM `users` WHERE `username` = ?)';
 
 
         $stmt = $this->dh->db_obj->prepare($sql);
-        $stmt->bind_param('ssssssssss', $firstName, $lastName, $address, $city, $postcode, $country, $uname, $password, $email, $uname);
+        $stmt->bind_param('sssssssssss', $firstName, $lastName, $address, $city, $postcode, $country, $uname, $password, $email, $uname, $isAdmin);
         // Wenn der Benutzer erfolgreich in die Datenbank hinzugefügt wurde, dass erscheint die Meldung, dass ein/e neue/r BenutzerIn erstellt wurde
         // eine entsprechende Meldung erscheint. Andernfalls bedeutet es dass der eingegebene Username bereits existiert und diese Meldunge erscheint auch.
         // if executed and a row affected return success message, else return error message
@@ -153,7 +154,7 @@ class profileLogic{
             return;
         } else {
             // Man holt sich die Daten von dem User
-            $sql = 'SELECT `email`, `username`, `password`, `admin` FROM `users`
+            $sql = 'SELECT `email`, `username`, `password`, `isAdmin` FROM `users`
                      WHERE (`username`=? OR `email` = ?) AND `aktiv` = ?';
             $stmt = $this->dh->db_obj->prepare($sql);
             $stmt->bind_param('ssi', $userInput, $userInput, $active);
@@ -165,27 +166,27 @@ class profileLogic{
             if ($user->num_rows == 1) {
                 $row = $user->fetch_assoc();
                 // Nun wird pberüprüft, ob das eingegebene Passwort korrekt ist
-                if (password_verify($password, $row['passwordInput'])) {
+                if (password_verify($password, $row['password'])) {
                     $result['success'] = 'Login erfolgreich, willkommen ' . $row['username'] . '!';
                     $result['username'] = $row['username'];
-                    $result['admin'] = $row['admin'];
+                    $result['admin'] = $row['isAdmin'];
                     if (!(isset($_SESSION))) {
                         session_start();
                     }
                     // Der session['name'] wird zugeordnet
                     $_SESSION['username'] = $row['username'];
-                    $_SESSION['admin'] = $row['admin'];
+                    $_SESSION['admin'] = $row['isAdmin'];
                     // wenn das rememberCheck angeklickt wurde, dann wird entweder ein 1h cookie oder ein 30 Tage cookie gesetzt
                     if (isset($param['rememberCheck']) && $param['rememberCheck']) {
                         // 30-Tage Cookie wenn Login merken
                         setcookie('rememberCheck', true, time() + (86400 * 30), '/');
                         setcookie('username', $row['username'], time() + (86400 * 30), '/');
-                        setcookie('admin', $row['admin'], time() + (86400 * 30), '/');
+                        setcookie('admin', $row['isAdmin'], time() + (86400 * 30), '/');
                     } else {
                         // 1-Stunde Cookie wenn nicht Login merken für Benutzerfreundlichkeit
                         setcookie('rememberCheck', true, time() + 3600, '/');
                         setcookie('username', $row['username'], time() + 3600, '/');
-                        setcookie('admin', $row['admin'], time() + 3600, '/');
+                        setcookie('admin', $row['isAdmin'], time() + 3600, '/');
                     }
                 } else {
                     // Wenn das Passwort nicht korrekt war
