@@ -8,6 +8,41 @@ class orderLogic
         $this->dh = $dh;
     }
 
+    function saveCart($param) {
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $method = $_POST['method'];
+
+            if ($method === 'saveCart') {
+                $cart = json_decode($_POST['cart'], true);
+                $_SESSION['cart'] = $cart;
+                return ['status' => 'success'];
+            }
+        }
+
+        return ['status' => 'error', 'message' => 'Invalid request method or parameters'];
+    }
+
+    function loadCart() {
+        session_start();
+
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $method = $_GET['method'];
+
+            if ($method === 'loadCart') {
+                if (isset($_SESSION['cart'])) {
+                    return $_SESSION['cart'];
+                } else {
+                    return [];
+                }
+            }
+        }
+
+        return null; // Handle error case or invalid request
+    }
+
+
     function processOrder($param) //bestellung verarbeiten
     {
         $result = array();

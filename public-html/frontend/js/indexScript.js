@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // Load products from the JSON file
+    // Load products from the database via PHP
     loadProducts();
 
     // Sort change listener
@@ -38,10 +38,27 @@ function sortProducts(products) {
 }
 
 function loadProducts() {
-    $.getJSON('../../backend/data/products.json', function(data) {
-        // Displays the products loaded
-        displayProducts(data);
-        console.log("Products loaded, yayaaaah!");
+    $.ajax({
+        type: 'POST',
+        url: '../../backend/logic/requestHandler.php',
+        data: {
+            method: 'loadAllProducts',
+            param: JSON.stringify({})
+        },
+        dataType: 'json',
+        success: function(data) {
+            // Check if there's an error in the response
+            if (data.error) {
+                console.error(data.error);
+            } else {
+                // Displays the products loaded
+                displayProducts(data);
+                console.log("Products loaded, yayaaaah!");
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading products: ', error);
+        }
     });
 }
 

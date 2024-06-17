@@ -93,17 +93,25 @@ $(document).ready(function() {
 
 function liveSearch(query) {
     $.ajax({
-        url: '../../backend/logic/queryLogic.php',
+        url: '../../backend/logic/requestHandler.php',
         type: 'GET',
-        data: { method: "searchProducts", query: query },
-        success: function(data) {
-            const products = JSON.parse(data);
-            sortProducts(products);
-            displayProducts(products);
-            $('#clear-icon').toggle(query.length > 0);
+        data: { method: "searchProducts", param: JSON.stringify({ query: query }) },
+        success: function(products) {
+            try {
+                products = JSON.parse(products);
+                if (products.error) {
+                    console.error(products.error);
+                    return;
+                }
+                sortProducts(products);
+                displayProducts(products);
+                $('#clear-icon').toggle(query.length > 0);
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+            }
         },
         error: function(xhr, status, error) {
-            console.error(error);
+            console.error("AJAX Error:", error);
         }
     });
 }
@@ -199,3 +207,21 @@ function saveCartToServer(callback) {
         }
     });
 }
+
+// Function to load cart from server
+function loadCartFromServer(callback) {
+    $.ajax({
+        url: '../../backend/logic/requestHandler.php',
+        type: 'GET',
+        data: { method: 'loadCart' },
+        success: function(data) {
+            const cart = JSON.parse(data) || [];
+            displayCartItems(cart);
+            if (callback) callback(cart);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error loading cart:', error);
+        }
+    });
+}
+

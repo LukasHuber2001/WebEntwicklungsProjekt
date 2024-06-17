@@ -1,6 +1,6 @@
 <?php
-// zentraler Request-Handler
 include('businessLogic.php');
+
 $requestType = $_SERVER['REQUEST_METHOD'];
 $method = '';
 $param = '';
@@ -18,17 +18,15 @@ switch ($requestType) {
         break;
     default:
         http_response_code(400);
+        response('GET', 400, ["error" => "Invalid request type"]);
         break;
 }
 
-// Methode und Parameter werden übergeben
 $logic = new businessLogic();
 $result = $logic->handleRequest($method, $param);
 
-// Wenn es ein Resultat gibt wird die ans Frontend per erfolgreicher Response zurückgeschickt
-// ansonsten erhält das Frontend einen 'Bad Request'
 if ($result == null) {
-    response('GET', 400, null);
+    response('GET', 400, ["error" => "Bad Request"]);
 } else {
     response($requestType, 200, $result);
 }
@@ -38,9 +36,9 @@ function response($request, $httpStatus, $data)
     header('Content-Type: application/json');
     if (in_array($request, array('GET', 'POST'))) {
         http_response_code($httpStatus);
-        echo (json_encode($data));
+        echo json_encode($data);
     } else {
         http_response_code(405);
-        echo ('Method not supported yet!');
+        echo json_encode(["error" => "Method not supported yet!"]);
     }
 }

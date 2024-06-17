@@ -8,18 +8,15 @@ class productLogic
         $this->dh = $dh;
     }
 
-    public function loadAllProducts() //alle produkte aus der db holen
+    public function loadAllProducts()
     {
+        $result = array();
 
-        $result = array(); // Initialisiere das Array
-
-        // Prüfe die Verbindung zur Datenbank
         if (!$this->dh->checkConnection()) {
             $result["error"] = "Versuchen Sie es später erneut!";
             return $result;
         }
 
-        // Führe die SQL-Abfrage aus
         $stmt = $this->dh->db_obj->prepare("SELECT * FROM `artikel`");
         if ($stmt->execute()) {
             $queryResult = $stmt->get_result();
@@ -30,73 +27,70 @@ class productLogic
             $result["error"] = "Versuchen Sie es später erneut!";
         }
 
-        // Schließe die Verbindung und gib das Array zurück
         $stmt->close();
         return $result;
     }
 
-    function searchProducts($param) //nach produkten suchen, die einen buchstaben/wort enthalten
+    public function searchProducts($param)
     {
         $result = array();
-        $searchTerm = $param['letter'];
-
-        // Verbindung zur DB prüfen
+        $searchTerm = '%' . $param['query'] . '%';
+    
         if (!$this->dh->checkConnection()) {
             $result["error"] = "Versuchen Sie es später erneut!";
             return $result;
         }
-
-        // Führe die SQL-Abfrage aus
-        $stmt = $this->dh->db_obj->prepare("SELECT * FROM `artikel`");
+    
+        $stmt = $this->dh->db_obj->prepare("SELECT * FROM `artikel` WHERE `name` LIKE ?");
+        $stmt->bind_param("s", $searchTerm);
+    
         if ($stmt->execute()) {
             $queryResult = $stmt->get_result();
-            // Füge die Ergebnisse in das Array ein
+            
             while ($row = $queryResult->fetch_assoc()) {
-                //produktname und buchstaben in kleinbuchstaben umwandeln, damit es case insensitive ist
-                if (stripos(strtolower($row['name']), strtolower($searchTerm)) !== false) {
-                    array_push($result, $row);
-                }
-            }
-            // überprüfe, ob produkte gefunden wurden. 
-            if (count($result) === 0) {
-                $result["error"] = "Kein Produkt gefunden!";
+                $result[] = $row; // Append each row to $result array
             }
         } else {
             $result["error"] = "Versuchen Sie es später erneut!";
         }
-
-        // Schließe die Verbindung und gib das Array zurück
+    
         $stmt->close();
-        return $result;
+        
+        // If no products were found, return an empty array
+        if (empty($result)) {
+            return json_encode([]); // Return an empty JSON array
+        } else {
+            return json_encode($result); // Return JSON-encoded result array
+        }
     }
+    
 
-    public function loadProductByID($param) //die details zu einem produkt angeben, productid ist gegeben
+    public function loadProductByID($param)
     {
         $result = array();
 
-        // Prüfe die Verbindung zur Datenbank
         if (!$this->dh->checkConnection()) {
             $result["error"] = "Versuchen Sie es später erneut!";
             return $result;
         }
 
-        // SQL - Prepared Statemenent durchführen 
         $stmt = $this->dh->db_obj->prepare("SELECT * FROM `artikel` WHERE `id` = ?");
         $stmt->bind_param("i", $param);
+
         if ($stmt->execute()) {
             $queryResult = $stmt->get_result();
             $row = $queryResult->fetch_assoc();
-            if ($row) { //produkt gefunden
+            if ($row) {
                 $result["success"] = true;
                 $result["data"] = $row;
             } else {
-                $result["success"] = false; //produkt nicht gefunden
+                $result["success"] = false;
                 $result["error"] = "Produkt nicht gefunden";
             }
         } else {
             $result["error"] = "Versuchen Sie es später erneut!";
         }
-        //Verbindung schließen und array zurückgeben
+
         $stmt->close();
         return $result;
     }
