@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 17. Jun 2024 um 21:32
+-- Erstellungszeit: 18. Jun 2024 um 22:18
 -- Server-Version: 10.4.32-MariaDB
 -- PHP-Version: 8.2.12
 
@@ -68,6 +68,20 @@ CREATE TABLE `orders` (
   `anzahl` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
+--
+-- Daten für Tabelle `orders`
+--
+
+INSERT INTO `orders` (`a_id`, `r_id`, `id`, `preis`, `anzahl`) VALUES
+(2, 20, 39, 79.99, 1),
+(5, 20, 40, 12.99, 1),
+(8, 20, 41, 79.99, 1),
+(9, 20, 42, 99.99, 2),
+(10, 21, 43, 239.99, 1),
+(7, 21, 44, 39.99, 1),
+(4, 21, 45, 19.99, 1),
+(6, 21, 46, 21.99, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -78,12 +92,22 @@ CREATE TABLE `receipt` (
   `id` int(10) NOT NULL,
   `datum` datetime NOT NULL,
   `user_id` int(10) NOT NULL,
-  `total` int(10) NOT NULL,
+  `total` decimal(10,2) NOT NULL,
   `ort` varchar(20) NOT NULL,
   `land` varchar(20) NOT NULL,
   `plz` varchar(6) NOT NULL,
   `adresse` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Daten für Tabelle `receipt`
+--
+
+INSERT INTO `receipt` (`id`, `datum`, `user_id`, `total`, `ort`, `land`, `plz`, `adresse`) VALUES
+(18, '2024-06-18 22:11:29', 20, 250.00, 'Wien', 'AT', '1200', 'Leithastraße 25'),
+(19, '2024-06-18 22:12:49', 20, 579.92, 'Wien', 'AT', '1200', 'Leithastraße 25'),
+(20, '2024-06-18 22:13:51', 20, 372.95, 'Wien', 'AT', '1200', 'Leithastraße 25'),
+(21, '2024-06-18 22:14:13', 20, 321.96, 'Wien', 'AT', '1200', 'Leithastraße 25');
 
 -- --------------------------------------------------------
 
@@ -92,18 +116,17 @@ CREATE TABLE `receipt` (
 --
 
 CREATE TABLE `users` (
-  `id` int(32) NOT NULL,
-  `vorname` varchar(20) NOT NULL,
-  `nachname` varchar(20) NOT NULL,
-  `adresse` varchar(20) NOT NULL,
-  `adresse2` varchar(20) DEFAULT NULL,
-  `ort` varchar(20) NOT NULL,
-  `plz` varchar(6) NOT NULL,
-  `land` varchar(3) NOT NULL,
-  `username` varchar(20) NOT NULL,
+  `id` int(250) NOT NULL,
+  `vorname` varchar(250) NOT NULL,
+  `nachname` varchar(250) NOT NULL,
+  `adresse` varchar(250) NOT NULL,
+  `ort` varchar(250) NOT NULL,
+  `plz` varchar(250) NOT NULL,
+  `land` varchar(250) NOT NULL,
+  `username` varchar(250) NOT NULL,
   `password` varchar(250) NOT NULL,
   `isAdmin` tinyint(1) DEFAULT NULL,
-  `email` varchar(20) NOT NULL,
+  `email` varchar(250) NOT NULL,
   `aktiv` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -111,17 +134,9 @@ CREATE TABLE `users` (
 -- Daten für Tabelle `users`
 --
 
-INSERT INTO `users` (`id`, `vorname`, `nachname`, `adresse`, `adresse2`, `ort`, `plz`, `land`, `username`, `password`, `isAdmin`, `email`, `aktiv`) VALUES
-(1, 'Lukas', 'Huber', 'Leithastraße', NULL, 'Wien', '1200', 'AT', 'admin', 'admin', 1, 'admin@gmail.com', 1),
-(11, 'test', 'test', 'test', 'test', 'test', '213', 'AT', 'test', '$2y$10$5a7ccNp0YM8Yy', NULL, 'testtesttest@gmail.c', 0),
-(12, 'final', 'test', 'test', 'test', 'test', '1200', 'AT', 'test', '$2y$10$IGl3vLgWF0qHQ', NULL, 'correctEmailFormat@g', 0),
-(13, 'abc', 'abc', 'abc', 'avb', 'wien', '1200', 'AT', 'test', '$2y$10$2YLgOYESydQYn', NULL, 'realEmail@gmail.com', 0),
-(14, 'test', 'test', 'test', 'test', 'test', '1200', 'AT', 'newUser', '$2y$10$3fLf65SdATM7M', NULL, 'newEmail@gmail.com', 0),
-(15, 'lukas', 'huber', 'leithastraße', NULL, 'Wien', '1200', 'AT', 'lukashuber2020', '$2y$10$2wy.DNL/fEfRj', NULL, 'lukastest@gmail.com', 1),
-(16, 'test', 'test', 'test', NULL, 'test', '2121', 'CZ', 'testee22', '$2y$10$.q.2FIUJKb95I', NULL, 'ttee@gmail.com', 1),
-(17, 'testee', 'tester', 'teststreet', NULL, 'testplace', '123123', 'LV', 'testee23', '$2y$10$uqxy1aQghXUm8', 0, 'testee23@gmail.com', 1),
-(18, 'test', 'test', 'test', NULL, 'test', '1234', 'AT', 'testtest', '$2y$10$mnWqJb09gdoiE', 0, 'newTest@gmail.com', 1),
-(19, 'newtest', 'test', 'test', NULL, 'tettete', '1233', 'AT', 'testing1', '$2y$10$Qwm6h3562uf4u.kuyolidOsytl4vRwqQOVSvtbWAukYhvQxJiFu2C', 0, 'reeeee@gmail.com', 1);
+INSERT INTO `users` (`id`, `vorname`, `nachname`, `adresse`, `ort`, `plz`, `land`, `username`, `password`, `isAdmin`, `email`, `aktiv`) VALUES
+(1, 'admin', 'admin', 'Wienerstraße', 'schwechat', '2320', 'AT', 'admin', '$2y$10$r0o2jT1HdO.M8p4EHHlPxeIE1ZwpSpORdXXqXcNqH6JitUJSuVUmW', 1, 'admin@gmail.com', 1),
+(20, 'Lukas', 'Huber', 'Leithastraße 25', 'Wien', '1200', 'AT', 'lukashuber', '$2y$10$aRHpeOHkgBQfUNdc.AJgP.vQK6lZc9bdYeq0FrZIysPDlTdNdb0ea', 0, 'LukasHuber@gmail.com', 1);
 
 --
 -- Indizes der exportierten Tabellen
@@ -162,19 +177,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT für Tabelle `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT für Tabelle `receipt`
 --
 ALTER TABLE `receipt`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(32) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(250) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints der exportierten Tabellen
