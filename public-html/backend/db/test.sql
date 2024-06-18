@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 18. Jun 2024 um 22:18
--- Server-Version: 10.4.32-MariaDB
--- PHP-Version: 8.2.12
+-- Erstellungszeit: 18. Jun 2024 um 22:38
+-- Server-Version: 10.4.28-MariaDB
+-- PHP-Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -43,16 +43,16 @@ CREATE TABLE `artikel` (
 --
 
 INSERT INTO `artikel` (`art_num`, `name`, `gender`, `price`, `size`, `color`, `category`, `image_url`) VALUES
-(1, 'T-Red', 'Männer,Frauen,Unisex', 19.99, 'S,M,L,XL,XXL', 'Rot', 'Tshirt', 'https://cdn.pixabay.com/photo/2016/12/06/09/31/blank-1886008_1280.png'),
-(2, 'Braune Herrenjacke', 'Männer', 79.99, 'M,L,XL,XXL', 'Braun', 'Jacke', 'https://cdn.pixabay.com/photo/2017/09/07/04/54/khaki-2723896_1280.jpg'),
-(3, 'Brilliantenarmband', 'Frauen', 29.99, 'S,M,L', 'Silber', 'Accessoires', '  https://cdn.pixabay.com/photo/2016/11/11/17/34/diamond-1817291_1280.png'),
-(4, 'Monkey Basketball shorts mens', 'Männer', 19.99, 'S,M,L,XL,XXL', 'Grün,Violett', 'Hosen', 'https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg'),
-(5, 'Zen Socken', 'Männer,Frauen,Unisex', 12.99, 'one-size', 'Violett,Grün,Orange', 'Accessories', 'https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg'),
-(6, 'Monkeys Polo ', 'Männer', 21.99, 'S,M,L,XL,XXL', 'Orange,Schwarz', 'Tshirt', 'https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg'),
-(7, 'T-Shirt Striped', 'Männer,Frauen,Unisex', 39.99, 'S,M,L,XL,XXL', 'Schwarz-Weiß,Rot-Blau', 'Tshirt', 'https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg'),
-(8, 'Baggy Jeans', 'Männer', 79.99, 'M,L,XL,XXL', 'Black,Gray', 'Hose', 'https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg'),
-(9, 'Hoodie mit Aufdruck', 'Männer,Frauen,Unisex', 99.99, 'L,XL,XXL,3XL', 'Schwarz,Grau,Dunkelblau', 'Hoodie', 'https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg'),
-(10, 'Anzug', 'Männer', 239.99, 'M,L,XL', 'Schwarz,Blau,Grau', 'Anzug', 'https://cdn.pixabay.com/photo/2017/08/11/14/19/honor-2631271_1280.jpg');
+(1, 'T-Red', 'Männer,Frauen,Unisex', 19.99, 'S,M,L,XL,XXL', 'Red', 'Tshirt', '../../backend/data/pictures/products/art1.png'),
+(2, 'Leathermen', 'Männer', 79.99, 'M,L,XL,XXL', 'Brown', 'Jacke', '../../backend/data/pictures/products/art2.png'),
+(3, 'Diamond Wristband', 'Frauen', 29.99, 'S,M,L', 'Silver', 'Accessoires', '../../backend/data/pictures/products/art3.png'),
+(4, 'Monkey Basketball shorts men', 'Männer', 19.99, 'S,M,L,XL,XXL', 'Green,Violet', 'Hosen', '../../backend/data/pictures/products/art4.png'),
+(5, 'Zen Socks', 'Männer,Frauen,Unisex', 12.99, 'one-size', 'Violet, Yellow, Orange', 'Accessories', '../../backend/data/pictures/products/art5.png'),
+(6, 'Monkeys Polo ', 'Männer', 21.99, 'S,M,L,XL,XXL', 'Green, Violet', 'Tshirt', '../../backend/data/pictures/products/art6.png'),
+(7, 'T-Shirt Striped', 'Männer,Frauen,Unisex', 39.99, 'S,M,L,XL,XXL', 'Black, White', 'Tshirt', '../../backend/data/pictures/products/art7.png'),
+(8, 'Baggy Jeans', 'Männer', 79.99, 'M,L,XL,XXL', 'Blue', 'Hose', '../../backend/data/pictures/products/art8.png'),
+(9, 'Hoodie with Print', 'Männer,Frauen,Unisex', 99.99, 'L,XL,XXL,3XL', 'Dark Grey', 'Hoodie', '../../backend/data/pictures/products/art9.png'),
+(10, 'The 007', 'Männer', 239.99, 'M,L,XL', 'Black', 'Anzug', '../../backend/data/pictures/products/art10.png');
 
 -- --------------------------------------------------------
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrierung</title>
+    <title>Register</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -19,32 +19,32 @@
 <div id="header-container"></div>
 
 <form id="registrationForm">
-    <h2 class="mb-4">Registrierung</h2>
+    <h2 class="mb-4">Register</h2>
     <div class="form-group">
-        <label for="firstName">Vorname</label>
-        <input type="text" class="form-control" id="firstName" placeholder="Vorname" required>
+        <label for="firstName">First Name</label>
+        <input type="text" class="form-control" id="firstName" placeholder="First Name" required>
     </div>
     <div class="form-group">
-        <label for="lastName">Nachname</label>
-        <input type="text" class="form-control" id="lastName" placeholder="Nachname" required>
+        <label for="lastName">Last Name</label>
+        <input type="text" class="form-control" id="lastName" placeholder="Last Name" required>
     </div>
     <div class="form-group">
-        <label for="address">Adresse</label>
-        <input type="text" class="form-control" id="address" placeholder="Adresse" required>
+        <label for="address">Adress</label>
+        <input type="text" class="form-control" id="address" placeholder="e.g. Hochstädtplatz 6" required>
     </div>
     <div class="form-group">
-        <label for="city">Ort</label>
-        <input type="text" class="form-control" id="city" placeholder="Ort" required>
+        <label for="city">City</label>
+        <input type="text" class="form-control" id="city" placeholder="e.g. Vienna" required>
     </div>
     <div class="form-row">
         <div class="form-group col-md-6">
-            <label for="postcode">PLZ</label>
-            <input type="text" class="form-control" id="postcode" placeholder="PLZ" required>
+            <label for="postcode">Postalcode</label>
+            <input type="text" class="form-control" id="postcode" placeholder="e.g. 1200" required>
         </div>
         <div class="form-group col-md-6">
-            <label for="country">Land</label>
+            <label for="country">Country</label>
             <select class="form-control" id="country" required>
-                <option value="">Bitte wählen</option>
+                <option value="">Please choose</option>
                 <option value="AL">Albanien</option>
                 <option value="AT">Österreich</option>
                 <option value="BE">Belgien</option>
@@ -85,26 +85,26 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="email">E-Mail-Adresse</label>
+        <label for="email">E-Mail-Adress</label>
         <input type="email" class="form-control" id="email" placeholder="Email" required>
     </div>
     <div class="form-group">
-        <label for="username">Benutzername</label>
-        <input type="text" class="form-control" id="username" placeholder="Benutzername" required>
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" placeholder="Username" required>
     </div>
     <div class="form-group">
-        <label for="password">Passwort</label>
-        <input type="password" class="form-control" id="password" placeholder="Passwort" required>
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password" required>
     </div>
     <div class="form-group">
-        <label for="password2">Passwort bestätigen</label>
-        <input type="password" class="form-control" id="password2" placeholder="Passwort bestätigen" required>
+        <label for="password2">Confirm Password</label>
+        <input type="password" class="form-control" id="password2" placeholder="Confirm Password" required>
     </div>
     <div class="form-check">
         <input type="checkbox" class="form-check-input" id="termsCheck" required>
-        <label class="form-check-label" for="termsCheck">Ich stimme den <a href=tos.html>Nutzungsbedingungen</a> zu</label>
+        <label class="form-check-label" for="termsCheck">I accept the <a href=tos.html>Terms Of Service</a></label>
     </div>
-    <button type="button" id="btn-register" class="btn btn-primary">Registrieren</button>
+    <button type="button" id="btn-register" class="btn btn-primary">Register</button>
 </form>
 </body>
 <footer></footer>

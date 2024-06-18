@@ -206,7 +206,7 @@ function updateCartDisplay() {
 
     // Event listeners for quantity input and delete button
     $('.quantity-input').off().on('change', updateQuantity);
-    $('.delete-btn').off().on('click', deleteCartItem);
+    $('.delete-btn').on('click', deleteCartItem);
 
     // Update the counter for the cart icon in the navbar
     $('#cart-count').text(cart.length);
@@ -229,7 +229,8 @@ function updateQuantity(event) {
 
 // Deletes product from cart
 function deleteCartItem(event) {
-    const artNum = parseInt($(event.target).data('art-num'));
+    // Using event.currentTarget to ensure the element with the handler is used
+    const artNum = parseInt($(event.currentTarget).data('art-num'));
 
     const cartIndex = cart.findIndex(item => item.art_num === artNum);
     if (cartIndex !== -1) {

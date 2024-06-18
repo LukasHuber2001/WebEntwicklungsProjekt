@@ -185,7 +185,7 @@ class accountLogic{
                         setcookie('admin', $row['isAdmin'], time() + (86400 * 30), '/');
                     } else {
                         // 1-Stunde Cookie wenn nicht Login merken für Benutzerfreundlichkeit
-                        setcookie('rememberCheck', true, time() + 3600, '/');
+                        setcookie('rememberCheck', false, time() + 3600, '/');
                         setcookie('username', $row['username'], time() + 3600, '/');
                         setcookie('admin', $row['isAdmin'], time() + 3600, '/');
                     }

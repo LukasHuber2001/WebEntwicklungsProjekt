@@ -11,18 +11,28 @@ $(document).ready(function () {
     }
 
     $(document).on('click', '#loadReceipts', function () {
-        getOrderInfo();
-    })
+        toggleOrderInfo();
+    });
 
     $(document).on('click', '#changeButton', function () {
         changeProfileData();
         loadProfileData();
         location.reload();
         $('html,body').scrollTop(0);
-    })
-})
+    });
+});
 
+let ordersLoaded = false; // Flag to track if orders are loaded
 
+function toggleOrderInfo() {
+    if (ordersLoaded) {
+        $('#ordersTable').empty(); // Clear the orders if already loaded
+        $('#loadReceipts').text('Load Receipts'); // Change button text to "Load Receipts"
+        ordersLoaded = false; // Update flag
+    } else {
+        getOrderInfo();
+    }
+}
 
 function getOrderInfo() {
     let username = getCookie('username');  //infos aus der db zu den bestellungen eines users holen
@@ -42,8 +52,10 @@ function getOrderInfo() {
                 for (let i in response) {
                     displayOrder(response[i]); //bestellungsanzeigen funktion aufrufen
                 }
+                $('#loadReceipts').text('Unload Receipts'); // Change button text to "Unload Receipts"
+                ordersLoaded = true; // Update flag
             } else {
-                $('#message-container').html('<div class="alert alert-warning" role="alert">Sie haben keine Bestellungen!</div>');
+                $('#message-container').html('<div class="alert alert-warning" role="alert">You haven\'t ordered anything yet!</div>');
                 $('#ordersModal').modal('show');
             }
         },
@@ -52,13 +64,14 @@ function getOrderInfo() {
         },
     });
 }
+
 function displayOrder(order) { //bestellungen anzeigen
     const ordersTable = $('#ordersTable');
     //es wird ein arr(order) weitergegenen mit einer bestimmten rechnungsid
 
     //table erstellen für je rechnungsid
     const table = $('<table>').addClass('table table-striped');
-    const thead = $('<thead>').append('<tr><th>Produkte</th><th>Preis</th><th>Anzahl</th></tr>');
+    const thead = $('<thead>').append('<tr><th>Articles</th><th>Price</th><th>Quantity</th></tr>');
     const tbody = $('<tbody>');
 
     for (let i = 0; i < order.length; i++) { //details zu den produkten anzeigen
@@ -79,26 +92,25 @@ function displayOrder(order) { //bestellungen anzeigen
     table.append(thead, tbody);
     ordersTable.append(table);
 
-    const details = $('<h6>').text('Bestelldetails');
+    const details = $('<h6>').text('Order details:');
     ordersTable.append(details);
 
     const date = order[0].datum;
-    const addressElement = $('<p>').text('Datum: ' + date);
+    const addressElement = $('<p>').text('Date: ' + date);
     ordersTable.append(addressElement);
 
     const address = order[0].adresse + ', ' + order[0].plz + ' ' + order[0].ort + ' ' + order[0].land;
-    const addressElement1 = $('<p>').text(' Adresse: ' + address);
+    const addressElement1 = $('<p>').text(' Adress: ' + address);
     ordersTable.append(addressElement1);
 
     const total = order[0].total;
-    const sumElement = $('<p>').addClass('sum-element').text('Summe: ' + total + '€');
+    const sumElement = $('<p>').addClass('sum-element').text('Total: ' + total + '€');
 
-    const button = $('<button>').attr('type', 'button').addClass('btn btn-success').text('Rechnung drucken');
+    const button = $('<button>').attr('type', 'button').addClass('btn btn-success').text('Show receipt');
     let receiptID = order[0].id;
     button.on('click', function () {
-        let pdfPath = "../../backend/data/receipts/ZenMonkey_receiptNr"+receiptID+".pdf" //rechnung drucken 
+        let pdfPath = "../../backend/data/receipts/ZenMonkey_receiptNr" + receiptID + ".pdf" //rechnung drucken 
         window.open(pdfPath, "_blank")
-
     });
 
     const sumRow = $('<div>').addClass('row'); //um Button "Rechnung drucken" und die Summe in einer row anzuzeigen
@@ -116,9 +128,7 @@ function displayOrder(order) { //bestellungen anzeigen
     table1.append(thead1, tbody1);
     ordersTable.append(table1);
 }
-// Wenn man seine Profildaten ändern will, dann wird die Funktion changeProfileData aufgerufen,
-// welche einen Postrequest an den requestHandler schickt, der die updateuserData-Method aufruft.
-// Im Success-Fall werden die aktualisierten User-Daten geladen und im Error-Fall eine entsprechende Meldung.
+
 function changeProfileData() {
     let username = getCookie('username');
     let newData = [];
@@ -179,11 +189,11 @@ function changeProfileData() {
             }
         },
         error: function () {
-
             alert("Fehler beim Aktualisieren der Daten!");
         }
     });
 }
+
 function getCookie(name) {
     let cookieArr = document.cookie.split(";");
     for (let i = 0; i < cookieArr.length; i++) {
@@ -194,6 +204,7 @@ function getCookie(name) {
     }
     return null;
 }
+
 function loadProfileData() {
     //get the username from the cookie
     let username = getCookie("username");
@@ -223,4 +234,3 @@ function loadProfileData() {
         },
     });
 }
-
