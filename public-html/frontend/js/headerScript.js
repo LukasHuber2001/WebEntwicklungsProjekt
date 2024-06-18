@@ -6,24 +6,24 @@ $(document).ready(function() {
     
     let isAdmin = getCookie('admin');
 
-    if(isAdmin == 1){
-        document.getElementById("adminDashboard").style.display = "block";
-    }
-
     if (username) {
         document.getElementById("lbl-welcome").innerHTML = "Welcome, " + username + "!";
         document.getElementById("login-link").style.display = "none";
         document.getElementById("registration-link").style.display = "none";
         document.getElementById("profil-link").style.display = "block";
         document.getElementById("logout-link").style.display = "block";
+        document.getElementById("dashboard-link").style.display = "none";
     } else {
         document.getElementById("lbl-welcome").innerHTML = "You are currently not logged in!";
         document.getElementById("login-link").style.display = "block";
         document.getElementById("registration-link").style.display = "block";
         document.getElementById("profil-link").style.display = "none";
         document.getElementById("logout-link").style.display = "none";
+        document.getElementById("dashboard-link").style.display = "none";
     }
-
+    if(isAdmin == 1){
+        document.getElementById("dashboard-link").style.display = "block";
+    }
     // Logout functionality
     document.getElementById("logout-link").addEventListener("click", function () {
         if (confirm("Are you sure you want to Logout?")) {

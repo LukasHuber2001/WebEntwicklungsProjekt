@@ -9,6 +9,7 @@ class orderLogic
     }
     function getReceiptByUser($param){
         $username= $param['username'];
+        
         // datenbankverbindung überprüfen
         if (!$this->dh->checkConnection()) {
             $result["error"] = "Versuchen Sie es später erneut!";
