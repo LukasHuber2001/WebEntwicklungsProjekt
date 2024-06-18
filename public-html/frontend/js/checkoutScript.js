@@ -144,7 +144,6 @@ $(document).ready(function() {
             });
 
             const receipt_id = response.receipt; // Assuming the server returns receipt ID in 'receipt' key
-            console.log('Order processed. Receipt ID:', receipt_id);
             return receipt_id;
 
         } catch (error) {
