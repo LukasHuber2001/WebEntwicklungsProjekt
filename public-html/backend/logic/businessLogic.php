@@ -61,6 +61,9 @@ class businessLogic
             case 'processOrder':
                 $res = $this->orderLogic->processOrder($param);
                 break;
+            case 'getReceipt':
+                $res = $this->orderLogic->getReceipt($param);
+                break;
             case 'loadAllUsers':
                 $res = $this->adminLogic->loadAllUsers();
                 break;

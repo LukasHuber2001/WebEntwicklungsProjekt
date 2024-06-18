@@ -4,11 +4,45 @@ $(document).ready(function() {
 
     let username = getCookie('username');
 
-    if(username){
+    if (username) {
         document.getElementById("lbl-welcome").innerHTML = "Welcome, " + username + "!";
-    } else{
+        document.getElementById("login-link").style.display = "none";
+        document.getElementById("registration-link").style.display = "none";
+        document.getElementById("profil-link").style.display = "block";
+        document.getElementById("logout-link").style.display = "block";
+    } else {
         document.getElementById("lbl-welcome").innerHTML = "You are currently not logged in!";
+        document.getElementById("login-link").style.display = "block";
+        document.getElementById("registration-link").style.display = "block";
+        document.getElementById("profil-link").style.display = "none";
+        document.getElementById("logout-link").style.display = "none";
     }
+
+    // Logout functionality
+    // Logout functionality
+    document.getElementById("logout-link").addEventListener("click", function () {
+        if (confirm("Are you sure you want to Logout?")) {
+            // Call the PHP logout function via AJAX
+            $.ajax({
+                url: '../../backend/logic/requestHandler.php',
+                type: 'POST',
+                data: { method: 'logoutUser' },
+                dataType: "json",
+                success: function (response) {
+                    // Assuming response contains JSON indicating success or failure
+                    if (response.loggedIn === false) {
+                        // Redirect to home page or login page
+                        window.location.href = "login.html";
+                    } else {
+                        alert("Logout failed. Please try again.");
+                    }
+                },
+                error: function () {
+                    alert("An error occurred while logging out. Please try again.");
+                }
+            });
+        }
+    });
 
     // Cart icon click listener
     $('#cart-icon').on('click', function() {
@@ -80,12 +114,9 @@ $(document).ready(function() {
         window.location.href = 'index.html';
     });
 
-    // Check if the user is logged in (placeholder condition)
-    const isLoggedIn = true; // Replace this with actual login check, once implemented
-
     // If user is not logged in, show the popup when the checkout button is clicked
     $('#checkout').on('click', function() {
-        if (!isLoggedIn) {
+        if (!username) {
             showPopup();
         } else {
             if (cart.length === 0) {
@@ -214,6 +245,7 @@ function loadCartFromSessionStorage() {
     savedCart.forEach(item => cart.push(item)); // Copy items from savedCart to cart
     updateCartDisplay();
 }
+
 function getCookie(name) {
     let cookieArr = document.cookie.split(";");
     for (let i = 0; i < cookieArr.length; i++) {

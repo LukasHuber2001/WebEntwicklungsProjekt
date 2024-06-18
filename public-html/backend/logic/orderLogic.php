@@ -155,4 +155,68 @@ class orderLogic
 
         return $tab;
     }
+    function getReceipt($param)
+    {
+        $receipt_id = $param;
+    
+        if (!$this->dh->checkConnection()) {
+            return ["error" => "Versuchen Sie es später erneut!"];
+        }
+    
+        // SQL query to retrieve receipt and associated order details
+        $sql = "SELECT `receipt`.`id`, `receipt`.`user_id`, `receipt`.`adresse`, 
+                `receipt`.`land`, `receipt`.`plz`, `receipt`.`ort`, `receipt`.`datum`, 
+                `orders`.`a_id`, `orders`.`preis`, `orders`.`anzahl`,
+                `artikel`.`name`, `artikel`.`price`,
+                `users`.`vorname` AS `buyer_firstName`,
+                `users`.`nachname` AS `buyer_lastName`,
+                `users`.`adresse` AS `buyer_address`,
+                `users`.`plz` AS `buyer_zip`,
+                `users`.`ort` AS `buyer_city`,
+                `users`.`land` AS `buyer_country`
+                FROM `receipt`
+                INNER JOIN `orders` ON `receipt`.`id` = `orders`.`r_id`
+                INNER JOIN `artikel` ON `orders`.`a_id` = `artikel`.`art_num`
+                INNER JOIN `users` ON `receipt`.`user_id` = `users`.`id`
+                WHERE `receipt`.`id` = ?";
+    
+        $stmt = $this->dh->db_obj->prepare($sql);
+        $stmt->bind_param("i", $receipt_id);
+        if (!$stmt->execute()) {
+            return ["error" => "Fehler bei der Datenbank!"];
+        }
+    
+        $result = $stmt->get_result();
+    
+        // Check if receipt data is found
+        if ($result->num_rows === 0) {
+            return ["error" => "Beleg nicht gefunden!"];
+        }
+    
+        $receiptData = [];
+        while ($row = $result->fetch_assoc()) {
+            // Prepare data structure for each item
+            $receiptData["receipt_id"] = $row['id'];
+            $receiptData["buyer"] = [
+                "vorname" => $row['buyer_firstName'],
+                "nachname" => $row['buyer_lastName'],
+                "address" => $row['buyer_address'],
+                "city" => $row['buyer_city'],
+                "zip" => $row['buyer_zip'],
+                "country" => $row['buyer_country'] // Adding country to buyer details
+            ];
+            $receiptData["datum"] = $row['datum']; // Adding receipt date
+            $receiptData["products"][] = [
+                "id" => $row['a_id'],
+                "name" => $row['name'],
+                "price" => $row['price'],
+                "quantity" => $row['anzahl']
+            ];
+        }
+    
+        $stmt->close();
+    
+        return $receiptData;
+    }
+        
 }

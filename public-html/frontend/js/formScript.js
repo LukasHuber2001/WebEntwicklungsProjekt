@@ -1,4 +1,12 @@
 $(document).ready(function () {
+//get username cookie
+    let username = getCookie('username');
+
+    //redirect user to profil.html if he is logged in
+    const currentPage = window.location.pathname.split("/").pop();
+    if ((currentPage === "login.html" || currentPage === "registration.html") && username) {
+        window.location.href = "profil.html";
+    }
     //login function
     $(document).on('click', '#btn-login', function () {
         let userInput = $('#userInput').val().trim();
@@ -158,3 +166,14 @@ function validateRegisterForm() {
 }
 
 });
+
+function getCookie(name) {
+    let cookieArr = document.cookie.split(";");
+    for (let i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+        if (name === cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
