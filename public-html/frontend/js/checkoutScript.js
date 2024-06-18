@@ -51,7 +51,7 @@ $(document).ready(function() {
     // Function to clear cart from sessionStorage
     function clearCartInSessionStorage() {
         sessionStorage.removeItem('cart');
-        console.log('Cart cleared in sessionStorage');
+
     }
 
     // Function to load and display cart items from sessionStorage
