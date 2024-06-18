@@ -111,7 +111,7 @@ $(document).ready(function() {
     });
 
     buyStuffBtn.addEventListener("click", function() {
-        window.location.href = 'index.html';
+        window.location.href = 'home.html';
     });
 
     // If user is not logged in, show the popup when the checkout button is clicked

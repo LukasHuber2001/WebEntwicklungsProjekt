@@ -8,7 +8,7 @@ $(document).ready(function() {
     //redirect user to profil.html if he is logged in
     const currentPage = window.location.pathname.split("/").pop();
     if (currentPage === "checkout.html" && (!username || cart.length === 0)) {
-        window.location.href = "index.html";
+        window.location.href = "home.html";
     }
 
     // Load cart items from sessionStorage

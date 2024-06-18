@@ -40,7 +40,7 @@ $(document).ready(function () {
                 if (response.success) {
                     //if login was successfull
                     alert(response.success);
-                    window.location.href = 'index.html';
+                    window.location.href = 'home.html';
                 } else if (response.error) {
                     alert(response.error, 'warning');
                 }

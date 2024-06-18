@@ -9,7 +9,7 @@ $(document).ready(function() {
     });
 });
 
-// Function to count the found products to display on index.html
+// Function to count the found products to display on home.html
 function productCounter(products) {
     const productCount = products.length;
     $('#product-count').text(`${productCount === 1 ? '1 product' : `${productCount} products`} found`);

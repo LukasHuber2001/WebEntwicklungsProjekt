@@ -3,11 +3,11 @@ $(document).ready(function() {
     $("#header-container").load("../sites/inc/header.html", function () {
         // Get the current page pathname
         const path = window.location.pathname.split("/").pop();
-        if (path !== "index.html") {
-            $("#search-container").remove(); // Remove the search container for all pages except index.html
+        if (path !== "home.html") {
+            $("#search-container").remove(); // Remove the search container for all pages except home.html
         }
         if (path == "checkout.html") {
-            $("#cart-icon").remove(); // Remove the search container for all pages except index.html
+            $("#cart-icon").remove(); // Remove the search container for all pages except home.html
         }
     });
     
