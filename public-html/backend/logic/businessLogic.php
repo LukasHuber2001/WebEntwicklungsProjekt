@@ -3,7 +3,6 @@ include('../config/dataHandler.php');
 include('accountLogic.php');
 include('productLogic.php');
 include('orderLogic.php');
-include('adminLogic.php');
 class businessLogic
 {
     // Initialsieren der Logic-Klassen
@@ -11,14 +10,12 @@ class businessLogic
     private $productLogic;
     private $accountLogic;
     private $orderLogic;
-    private $adminLogic;
     function __construct()
     {
         $dh = new dataHandler();
         $this->productLogic = new productLogic($dh);
         $this->accountLogic = new accountLogic($dh);
         $this->orderLogic = new orderLogic($dh);
-        $this->adminLogic = new adminLogic($dh);
         session_start();
     }
 
@@ -66,36 +63,6 @@ class businessLogic
                 break;
             case 'getReceiptByUser':
                 $res = $this->orderLogic->getReceiptByUser($param);
-                break;
-            case 'loadAllUsers':
-                $res = $this->adminLogic->loadAllUsers();
-                break;
-            case 'loadUserByID':
-                $res = $this->adminLogic->loadUserByID($param);
-                break;
-            case 'activateUser':
-                $res = $this->adminLogic->activateUser($param);
-                break;
-            case 'deactivateUser':
-                $res = $this->adminLogic->deactivateUser($param);
-                break;
-            case 'loadOrdersByUserID':
-                $res = $this->adminLogic->loadOrdersByUserID($param);
-                break;
-            case 'loadOrderByID':
-                $res = $this->adminLogic->loadOrderByID($param);
-                break;
-            case 'changeOrderLine':
-                $res = $this->adminLogic->changeOrderLine($param);
-                break;
-            case 'createProduct':
-                $res = $this->adminLogic->createProduct();
-                break;
-            case 'updateProduct':
-                $res = $this->adminLogic->updateProduct();
-                break;
-            case 'deleteProduct':
-                $res = $this->adminLogic->deleteProduct($param);
                 break;
             default:
                 $res = null;
