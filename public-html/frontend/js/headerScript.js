@@ -231,6 +231,7 @@ function deleteCartItem(event) {
     }
 
     updateCartDisplay();
+    saveCartToSessionStorage(); // Save updated cart to sessionStorage
 }
 
 // Save cart to sessionStorage
