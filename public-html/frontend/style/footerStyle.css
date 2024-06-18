@@ -38,3 +38,10 @@ html, body {
     display: flex;
     flex-direction: column;
 }
+
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

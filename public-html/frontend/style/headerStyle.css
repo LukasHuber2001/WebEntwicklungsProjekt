@@ -1,13 +1,66 @@
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000; /* Ensure it's above other content */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    background-color: #ffffff; /* Ensuring background color to cover the shadow area */
+/* Navbar specific styles */
+.navbar-nav {
+    flex-direction: row;
+    align-items: center;
 }
 
-label{
-    margin-top: 8px;
+.nav-item {
+    margin-left: 10px;
+}
+
+#cart-icon {
+    display: flex;
+    align-items: center;
+}
+
+#lbl-welcome {
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+    color: #000; /* Add color if necessary */
+}
+
+.dropdown-menu-right {
+    right: 0;
+    left: auto;
+}
+
+.modal-dialog {
+    max-width: 90%;
+    margin: 30px auto;
+}
+
+@media (max-width: 768px) {
+    .modal-dialog {
+        max-width: 100%;
+        margin: 15px auto;
+    }
+}
+
+
+@media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .nav-item {
+        margin-left: 0;
+        margin-bottom: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    #lbl-welcome {
+        margin-left: 0;
+        margin-bottom: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    .dropdown-menu-right {
+        width: 100%;
+        text-align: center;
+    }
 }

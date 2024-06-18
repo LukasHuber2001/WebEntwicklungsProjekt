@@ -81,8 +81,8 @@ function displayProducts(products) {
         // Create the cards with HTML
         const card = $(`
             <div class="col-md-4 d-flex align-items-stretch">
-                <div class="card mb-4" style="width: 340px">
-                    <img style="height:300px; width: 340px" src="${product.image_url}" class="card-img-top" alt="${product.name}">
+                <div class="card mb-4">
+                    <img src="${product.image_url}" class="card-img-top" alt="${product.name}">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title mt-auto">${product.name}</h5>
                         <p class="card-text mt-auto">Price: €${product.price.toFixed(2)}</p>
@@ -93,7 +93,7 @@ function displayProducts(products) {
                 </div>
             </div>
         `);
-
+        
         // Add the card to the row
         row.append(card);
     });
