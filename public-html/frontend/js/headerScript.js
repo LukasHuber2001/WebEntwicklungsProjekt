@@ -3,6 +3,12 @@ $(document).ready(function() {
     $('.dropdown-toggle').dropdown();
 
     let username = getCookie('username');
+    
+    let isAdmin = getCookie('admin');
+
+    if(isAdmin == 1){
+        document.getElementById("adminDashboard").style.display = "block";
+    }
 
     if (username) {
         document.getElementById("lbl-welcome").innerHTML = "Welcome, " + username + "!";
