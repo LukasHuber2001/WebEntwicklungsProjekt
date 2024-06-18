@@ -37,8 +37,8 @@
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#" id="cart-icon" data-toggle="modal" data-target="#cart-modal">
-                    <i class="fas fa-shopping-cart"></i>
+                <a class="nav-link" href="#" id="cart-icon" data-toggle="modal" data-target="#cart-modal" ondrop="drop(event)" ondragover="allowDrop(event)">
+                        <i class="fas fa-shopping-cart"></i>
                     <span class="badge badge-pill badge-danger" id="cart-count">0</span>
                 </a>
             </li>
