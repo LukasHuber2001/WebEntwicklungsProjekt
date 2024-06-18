@@ -195,7 +195,9 @@ function getCookie(name) {
     return null;
 }
 function loadProfileData() {
+    //get the username from the cookie
     let username = getCookie("username");
+    // Make an AJAX request to get profile data
     $.ajax({
         type: "GET",
         url: "../../Backend/logic/requestHandler.php",
@@ -205,6 +207,7 @@ function loadProfileData() {
         },
         dataType: "json",
         success: function (response) {
+            // Fill HTML elements with the response data
             $("#firstNameold").text(response.vorname);
             $("#lastNameold").text(response.nachname);
             $("#addressold").text(response.adresse);
@@ -214,6 +217,7 @@ function loadProfileData() {
             $("#usernameold").text(response.username);
             $("#landold").text(response.land);
         },
+        // Show an error alert if the request fails
         error: function () {
             alert("Fehler beim Login!");
         },
