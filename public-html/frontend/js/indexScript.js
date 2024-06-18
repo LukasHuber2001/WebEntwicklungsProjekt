@@ -86,7 +86,7 @@ function loadProducts() {
                 sessionStorage.setItem('products', JSON.stringify(data));
                 // Display the products loaded
                 displayProducts(data);
-                console.log("Products loaded successfully!");
+        
             }
         },
         error: function(xhr, status, error) {
