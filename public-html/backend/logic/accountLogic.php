@@ -246,7 +246,7 @@ class accountLogic{
         // des Users/ der Userin eingetragen werden muss...
         $result = array();
         //man holt sich erneut die Daten des users, wo sie dem Usernamen entsprechen
-        $sql = 'SELECT vorname, nachname, adresse, plz, ort, email, username, passwort FROM users WHERE username = ?';
+        $sql = 'SELECT vorname, nachname, adresse, plz, ort, land, email, username, password FROM users WHERE username = ?';
         $stmt = $this->dh->db_obj->prepare($sql);
         $stmt->bind_param('s', $param['actualusername']);
         $stmt->execute();
@@ -318,7 +318,7 @@ class accountLogic{
                         $data['pw'] = password_hash($param['pw'], PASSWORD_DEFAULT);
                     }
                 } else {
-                    $data['pw'] = $row['passwort'];
+                    $data['pw'] = $row['password'];
                 }
             }
         } else {
@@ -341,18 +341,18 @@ class accountLogic{
             return $data;
         } else {
             // ansonsten werden die Einträge in der Datenbank geupdatet
-            $sqlUpdate = 'UPDATE `users` SET  `vorname` = ?, `nachname` = ?, `adresse` = ?, `plz` = ?, `ort` = ?, `email` = ?, `passwort` = ?, `username` = ? 
+            $sqlUpdate = 'UPDATE `users` SET  `land` = ?, `vorname` = ?, `nachname` = ?, `adresse` = ?, `plz` = ?, `ort` = ?, `email` = ?, `password` = ?, `username` = ? 
             WHERE `username` = ?';
 
             $stmtUpdate = $this->dh->db_obj->prepare($sqlUpdate);
             $stmtUpdate->bind_param(
-                'sssssssss',
+                'ssssssssss',
+                $data['land'],
                 $data['vorname'],
                 $data['nachname'],
-                $data['adress'],
-                $data['postcode'],
+                $data['adresse'],
+                $data['plz'],
                 $data['ort'],
-                $data['land'],
                 $data['email'],
                 $data['pw'],
                 $data['username'],
