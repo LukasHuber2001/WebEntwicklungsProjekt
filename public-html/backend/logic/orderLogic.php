@@ -7,11 +7,35 @@ class orderLogic
     {
         $this->dh = $dh;
     }
+    function getReceiptByUser($param){
+        $username= $param['username'];
+        // datenbankverbindung überprüfen
+        if (!$this->dh->checkConnection()) {
+            $result["error"] = "Versuchen Sie es später erneut!";
+            return $result; 
+        }
+        $stmt = $this->dh->db_obj->prepare("SELECT `id`  FROM `users` WHERE `username` = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $queryResult = $stmt->get_result();
+        $row = $queryResult->fetch_assoc();
+        $user_id = $row['id'];
+        $stmt->close();
+
+        $sql = $this->dh->db_obj->prepare("SELECT `id`, `total`, `datum`, `land`, `adresse`, `ort`, `plz` FROM `receipt` WHERE `username` = ? ORDER BY id ASC");
+        $sql->bind_param("i", $user_id);
+        
+        while($line=mysqli_fetch_array($sql)) {    
+            $results[]=array('id'=>$line['id'],'total'=>$line['total'],'datum'=>$line['datum'],'land'=>$line['land'],'adresse'=>$line['adresse'],'plz'=>$line['plz'],'ort'=>$line['ort']);
+        }
+        return $results; 
+
+    }
 
     function processOrder($param) //bestellung verarbeiten
     {
         $result = array();
-
+        $total = 0;
         // datenbankverbindung überprüfen
         if (!$this->dh->checkConnection()) {
             $result["error"] = "Versuchen Sie es später erneut!";
@@ -51,7 +75,7 @@ class orderLogic
         $postcode = $row['plz'];
         $city = $row['ort'];
         $country = $row['land'];
-        $date = '01.01.2000';
+        
 
         $stmt->close();
 
@@ -75,7 +99,7 @@ class orderLogic
                 $product_id = $item['id'];
                 $preis = $item['price'];
                 $anzahl = $item['quantity'];
-
+                $total += $preis*$anzahl;
                 // Orderlines in db einfügen
                 $stmt = $this->dh->db_obj->prepare("INSERT INTO `orders` (r_id, a_id, preis, anzahl) VALUES (?, ?, ?, ?)");
                 $stmt->bind_param("iidi", $receipt_id, $product_id, $preis, $anzahl);
@@ -86,19 +110,30 @@ class orderLogic
                 }
                 $stmt->close();
             }
-        } catch (Exception $e) {
+                    } catch (Exception $e) {
             $result['error'] = "Fehler bei der Erstellung der Bestellung!";
             $this->dh->db_obj->rollback();
             $stmt->close();
             return $result;
         }
+        
+        $stmt = $this->dh->db_obj->prepare("UPDATE `receipt` SET `total` = ? WHERE `id` = ?");
+            $stmt->bind_param("di", $total, $receipt_id);
+            if (!$stmt->execute()) {
+                $result['error'] = "Fehler bei der Erstellung der Bestellung!";
+                $this->dh->db_obj->rollback();
+                return $result;
+            }
+            $stmt->close();
+            
         $this->dh->db_obj->commit();
-
         // gibt nachricht zurück
         $result['success'] = 'Bestellung erfolgreich abgeschlossen!';
         $result['receipt'] = $receipt_id;
         return $result;
     }
+
+
     function getOrders($param) //Bestellungen zu einem user aus der db holen
     {
         $username = $param['username'];
@@ -119,12 +154,11 @@ class orderLogic
         //table products und orderlines werden gejoined, sodass die rechnungsids übereinstimmen
         //es wird zuerst nach datum, dann nach aufsteigender rechnungsid sortiert. 
         //summe, produktname, datum, rechnungsid, adresse, productid, preis der einzelnen produkte werden aus den tabellen geholt.
-        $sql = "SELECT `receipt`.`summe`,`artikel`.`name`, `receipt`.`datum`, 
-        `receipt`.`id`, `receipt`.`adresse`, `receipt`.`plz`, 
-        `receipt`.`ort`, `orders`.`anzahl`, 
-        `orders`.`a_id`, `orders`.`preis` 
+        $sql = "SELECT `receipt`.`total`,`artikel`.`name`, `receipt`.`datum`, 
+        `receipt`.`id`, `receipt`.`adresse`, `receipt`.`plz`, `receipt`.`ort`, `receipt`.`land`, 
+        `orders`.`anzahl`, `orders`.`a_id`, `orders`.`preis` 
         FROM `receipt` INNER JOIN `orders` ON `receipt`.`id` = `orders`.`r_id` 
-        INNER JOIN `artikel` ON `orders`.`a_id` = `artikel`.`id` 
+        INNER JOIN `artikel` ON `orders`.`a_id` = `artikel`.`art_num` 
         WHERE `receipt`.`user_id` = (SELECT `id` FROM `users` WHERE `username` = ?) 
         ORDER BY `receipt`.`datum`, `receipt`.`id` ASC";
         $stmt = $this->dh->db_obj->prepare($sql);
