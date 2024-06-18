@@ -12,18 +12,19 @@ $(document).ready(function() {
     function allowDrop(ev) {
         ev.preventDefault();
     }
-
+    // extract product-ID from the nearest element with the class .col-md-4 
     function drag(ev) {
         const productId = $(ev.target).closest('.col-md-4').attr('id').replace('product-', '');
         ev.dataTransfer.setData("productId", productId);
     }
-
+    
     function drop(ev) {
         ev.preventDefault();
         const productId = ev.dataTransfer.getData("productId");
         const product = getProductById(productId);
         if (product) {
             addToCart(product);
+            //update the counter of the cart
             productCounter(JSON.parse(sessionStorage.getItem('products')));
         }
     }
