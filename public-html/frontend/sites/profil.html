@@ -15,323 +15,93 @@
 </head>
 
 <body>
-
-    <!--  Admin Dashboard  -->
-    <div id="adminDashboard" class="container">
-        <div class="text-center">
-            <h1>Admin-Dashboard</h1>
-        </div>
-        <div class="card-deck">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Kundenverwaltung</h5>
-                    <p class="card-text">Kundenprofile und Kundenbestellungen verwalten.</p>
-                    <button type="button" id="showProfileManagement" class="btn btn-success">Zur
-                        Kundenverwaltung</button>
-                </div>
+    <h1>Profil-Verwaltung</h1>
+    <div class="modal-body">
+        <div id="message-container"></div>
+        <div id="profileForm" class="container">
+            <h3 class="container-fluid">Aktuelle Daten</h3>
+            <table class="table">
+                <tr>
+                    <th>Vorname</th>
+                    <td id="firstNameold"></td>
+                </tr>
+                <tr>
+                    <th>Nachname</th>
+                    <td id="lastNameold"></td>
+                </tr>
+                <tr>
+                    <th>Adresse</th>
+                    <td id="addressold"></td>
+                </tr>
+                <tr>
+                    <th>Postleitzahl</th>
+                    <td id="postcodeold"></td>
+                </tr>
+                <tr>
+                    <th>Ort</th>
+                    <td id="ortold"></td>
+                </tr>
+                <tr>
+                    <th>Land</th>
+                    <td id="landold"></td>
+                </tr>
+                <tr>
+                    <th>E-Mail</th>
+                    <td id="emailold"></td>
+                </tr>
+                <tr>
+                    <th>Benutzername</th>
+                    <td id="usernameold"></td>
+                </tr>
+            </table>
+            <div class="form-group">
+                <label for="firstNamenew">Vorname</label>
+                <input type="text" class="form-control" id="firstNamenew">
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Produktverwaltung</h5>
-                    <p class="card-text">Produkte, Bestände und Preise verwalten.</p>
-                    <button type="button" id="showProductManagement" class="btn btn-success">Zur
-                        Produktverwaltung</button>
-                </div>
+            <div class="form-group">
+                <label for="lastNamenew">Nachname</label>
+                <input type="text" class="form-control" id="lastNamenew">
             </div>
-        </div>
-    </div>
-
-    <!--  Content für Kundenverwaltung  -->
-    <div id="userManagement" class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 text-center">
-                <h2>Kundenverwaltung</h2>
+            <div class="form-group">
+                <label for="addressnew">Adresse</label>
+                <input type="text" class="form-control" id="addressnew">
             </div>
-        </div>
-        <div id="userListAdmin" class="container-fluid"></div>
-        <div class="modal fade" id="userDataModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Benutzerdaten</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="message-container"></div>
-                        <div id="userTable" class="container">
-                            <table class="table">
-                                <tr>
-                                    <th>Status</th>
-                                    <td id="userStatus"></td>
-                                </tr>
-                                <tr>
-                                    <th>Anrede</th>
-                                    <td id="userFOD"></td>
-                                </tr>
-                                <tr>
-                                    <th>Vorname</th>
-                                    <td id="userFirstName"></td>
-                                </tr>
-                                <tr>
-                                    <th>Nachname</th>
-                                    <td id="userLastName"></td>
-                                </tr>
-                                <tr>
-                                    <th>Adresse</th>
-                                    <td id="userAddress"></td>
-                                </tr>
-                                <tr>
-                                    <th>Postleitzahl</th>
-                                    <td id="userPostcode"></td>
-                                </tr>
-                                <tr>
-                                    <th>Ort</th>
-                                    <td id="userCity"></td>
-                                </tr>
-                                <tr>
-                                    <th>E-Mail</th>
-                                    <td id="userEmail"></td>
-                                </tr>
-                                <tr>
-                                    <th>Benutzername</th>
-                                    <td id="userUsername"></td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="activateUser" class="btn btn-success">Benutzer aktivieren</button>
-                        <button type="button" id="deactivateUser" class="btn btn-danger">Benutzer deaktivieren</button>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="postcodenew">Postleitzahl</label>
+                <input type="text" class="form-control" id="postcodenew">
             </div>
-        </div>
-        <div class="modal fade" id="orderDataModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Bestelldaten</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="message-container"></div>
-                        <div id="orderTable" class="container"></div>
-                    </div>
-                </div>
+            <div class="form-group">
+                <label for="ortnew">Ort</label>
+                <input type="text" class="form-control" id="ortnew">
+            </div>
+            <div class="form-group">
+                <label for="landnew">Land</label>
+                <input type="text" class="form-control" id="landnew">
+            </div>
+            <div class="form-group">
+                <label for="emailnew">E-Mail</label>
+                <input type="email" class="form-control" id="emailnew" required>
+            </div>
+            <div class="form-group">
+                <label for="usernamenew">Benutzername</label>
+                <input type="text" class="form-control" id="usernamenew">
+            </div>
+            <div class="form-group">
+                <label for="passwordnew">Neues Passwort (mind. 8 Zeichen)</label>
+                <input type="password" class="form-control" id="passwordnew" required>
+            </div>
+            <div class="form-group">
+                <label for="pw_alt">Altes Passwort</label>
+                <input type="password" class="form-control" id="pw_alt" required>
             </div>
         </div>
     </div>
-
-    <!--  Content für Produktverwaltung  -->
-    <div id="productManagement" class="container">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 text-center">
-                <h2>Produktverwaltung</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 offset-md-3">
-                <form enctype="multipart/form-data">
-                    <div class="form-group">
-                        <label for="category">Kategorie:</label>
-                        <select id="categoryAdd" class="form-control">
-                            <option value="Skincare">Skincare</option>
-                            <option value="Make-Up">Make-Up</option>
-                            <option value="Parfüm">Parfüm</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="productNameAdd">Name:</label>
-                        <input type="text" id="productNameAdd" class="form-control" placeholder="Produktname">
-                    </div>
-                    <div class="form-group">
-                        <label for="priceAdd">Preis:</label>
-                        <input type="number" id="priceAdd" class="form-control" placeholder="Produktpreis">
-                    </div>
-                    <div class="form-group">
-                        <label for="descriptionAdd">Beschreibung:</label>
-                        <textarea id="descriptionAdd" class="form-control"
-                            placeholder="Optionale Produktbeschreibung"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="pictureAdd">Bild hochladen:</label>
-                        <input type="file" id="pictureAdd" class="form-control"
-                            accept="image/jpeg, image/png, image/gif">
-                    </div>
-                    <div class="col-md-6 offset-md-3 text-center">
-                        <button type="button" id="createProduct" class="btn btn-success mt-2">Produkt
-                            hinzufügen</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="row mt-2">
-            <div class="col-md-6 offset-md-3 text-center">
-                <h2>Produktkatalog</h2>
-            </div>
-        </div>
-        <div id="productListAdmin" class="container-fluid"></div>
-        <div class="modal fade" id="changeProductModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Produkt ändern</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="message-container"></div>
-                        <div class="container" id="updateProductForm">
-                            <form enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <label for="productID">ID:</label>
-                                    <input type="number" id="productID" class="form-control" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="categoryEdit">Kategorie:</label>
-                                    <select id="categoryEdit" class="form-control">
-                                        <option value="Skincare">Skincare</option>
-                                        <option value="Make-Up">Make-Up</option>
-                                        <option value="Parfüm">Parfüm</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="productNameEdit">Name:</label>
-                                    <input type="text" id="productNameEdit" class="form-control"
-                                        placeholder="Produktname">
-                                </div>
-                                <div class="form-group">
-                                    <label for="priceEdit">Preis:</label>
-                                    <input type="number" id="priceEdit" class="form-control" placeholder="Produktpreis">
-                                </div>
-                                <div class="form-group">
-                                    <label for="descriptionEdit">Beschreibung:</label>
-                                    <textarea id="descriptionEdit" class="form-control"
-                                        placeholder="Produktbeschreibung"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label>Aktuelles Bild:</label>
-                                    <div id="currentPicturePreview" class="container-fluid text-center">
-                                        <img id="currentPicturePreviewImg" alt="Current Picture" class="img-fluid"
-                                            style="max-width: 100%; max-height: 200px;">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pictureEdit">Bild hochladen:</label>
-                                    <input type="file" id="pictureEdit" class="form-control"
-                                        accept="image/jpeg, image/png, image/gif">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="modal-footer" id="editProductFooter">
-                        <button id="updateProduct" type="button" class="btn btn-success">Produkt ändern</button>
-                        <button id="deleteProduct" type="button" class="btn btn-danger">Produkt löschen</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="modal-footer">
+        <button type="button" id="changeButton" class="btn btn-success">Daten aktualisieren</button>
     </div>
-
-    <!-- Content für Profil-Management  -->
-    
-        <div class="modal fade" id="profilManagement" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Meine Profildaten</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="message-container"></div>
-                        <div id="profileForm" class="container">
-                            <h3 class="container-fluid">Aktuelle Daten</h3>
-                            <table class="table">
-                                <tr>
-                                    <th>Anrede</th>
-                                    <td id="formofAddressold"></td>
-                                </tr>
-                                <tr>
-                                    <th>Vorname</th>
-                                    <td id="firstNameold"></td>
-                                </tr>
-                                <tr>
-                                    <th>Nachname</th>
-                                    <td id="lastNameold"></td>
-                                </tr>
-                                <tr>
-                                    <th>Adresse</th>
-                                    <td id="addressold"></td>
-                                </tr>
-                                <tr>
-                                    <th>Postleitzahl</th>
-                                    <td id="postcodeold"></td>
-                                </tr>
-                                <tr>
-                                    <th>Ort</th>
-                                    <td id="cityold"></td>
-                                </tr>
-                                <tr>
-                                    <th>E-Mail</th>
-                                    <td id="emailold"></td>
-                                </tr>
-                                <tr>
-                                    <th>Benutzername</th>
-                                    <td id="usernameold"></td>
-                                </tr>
-                            </table>
-                            <div class="form-group">
-                                <label for="inputFOD">Anrede</label>
-                                <select class="form-select" id="formofAddressnew">
-                                    <option value="Herr">Herr</option>
-                                    <option value="Frau">Frau</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="firstNamenew">Vorname</label>
-                                <input type="text" class="form-control" id="firstNamenew">
-                            </div>
-                            <div class="form-group">
-                                <label for="lastNamenew">Nachname</label>
-                                <input type="text" class="form-control" id="lastNamenew">
-                            </div>
-                            <div class="form-group">
-                                <label for="addressnew">Adresse</label>
-                                <input type="text" class="form-control" id="addressnew">
-                            </div>
-                            <div class="form-group">
-                                <label for="postcodenew">Postleitzahl</label>
-                                <input type="text" class="form-control" id="postcodenew">
-                            </div>
-                            <div class="form-group">
-                                <label for="citynew">Ort</label>
-                                <input type="text" class="form-control" id="citynew">
-                            </div>
-                            <div class="form-group">
-                                <label for="emailnew">E-Mail</label>
-                                <input type="email" class="form-control" id="emailnew" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="usernamenew">Benutzername</label>
-                                <input type="text" class="form-control" id="usernamenew">
-                            </div>
-                            <div class="form-group">
-                                <label for="passwordnew">Neues Passwort (mind. 8 Zeichen)</label>
-                                <input type="password" class="form-control" id="passwordnew" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="pw_alt">Altes Passwort</label>
-                                <input type="password" class="form-control" id="pw_alt" required>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="changeButton" class="btn btn-success">Daten aktualisieren</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+    </div>
+    </div>
 </body>
 
 </html>

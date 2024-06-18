@@ -293,6 +293,11 @@ class accountLogic{
                 } else {
                     $data['ort'] = $row['ort'];
                 }
+                if (!empty($param['land'])) {
+                    $data['land'] = $param['land'];
+                } else {
+                    $data['land'] = $row['land'];
+                }
                 // Email-Validierung
                 if (!empty($param['email']) && filter_var($this->test_input($param["email"]), FILTER_VALIDATE_EMAIL)) {
                     $data['email'] = $param['email'];
@@ -346,7 +351,8 @@ class accountLogic{
                 $data['nachname'],
                 $data['adress'],
                 $data['postcode'],
-                $data['city'],
+                $data['ort'],
+                $data['land'],
                 $data['email'],
                 $data['pw'],
                 $data['username'],
