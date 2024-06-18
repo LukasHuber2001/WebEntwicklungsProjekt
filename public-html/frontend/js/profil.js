@@ -96,7 +96,9 @@ function displayOrder(order) { //bestellungen anzeigen
     const button = $('<button>').attr('type', 'button').addClass('btn btn-success').text('Rechnung drucken');
     let receiptID = order[0].id;
     button.on('click', function () {
-        printReceipt(receiptID);   //rechnung drucken 
+        let pdfPath = "../../backend/data/receipts/ZenMonkey_receiptNr"+receiptID+".pdf" //rechnung drucken 
+        window.open(pdfPath, "_blank")
+
     });
 
     const sumRow = $('<div>').addClass('row'); //um Button "Rechnung drucken" und die Summe in einer row anzuzeigen
