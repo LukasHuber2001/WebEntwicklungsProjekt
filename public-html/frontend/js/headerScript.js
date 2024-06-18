@@ -25,7 +25,6 @@ $(document).ready(function() {
     }
 
     // Logout functionality
-    // Logout functionality
     document.getElementById("logout-link").addEventListener("click", function () {
         if (confirm("Are you sure you want to Logout?")) {
             // Call the PHP logout function via AJAX
@@ -205,10 +204,11 @@ function updateCartDisplay() {
     // Update total price
     $('#total-price').text(`€${totalPrice.toFixed(2)}`);
 
-    // Simple event listener for quantity input and delete button
-    $('.quantity-input').on('change', updateQuantity);
-    $('.delete-btn').on('click', deleteCartItem);
-    // Updates the counter for the cart icon in the navbar
+    // Event listeners for quantity input and delete button
+    $('.quantity-input').off().on('change', updateQuantity);
+    $('.delete-btn').off().on('click', deleteCartItem);
+
+    // Update the counter for the cart icon in the navbar
     $('#cart-count').text(cart.length);
 
     sessionStorage.setItem('cart', JSON.stringify(cart));
@@ -227,7 +227,7 @@ function updateQuantity(event) {
     updateCartDisplay();
 }
 
-// Deletes product off of cart
+// Deletes product from cart
 function deleteCartItem(event) {
     const artNum = parseInt($(event.target).data('art-num'));
 

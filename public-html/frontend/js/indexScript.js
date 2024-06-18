@@ -7,7 +7,37 @@ $(document).ready(function() {
         const query = $('#search-input').val();
         liveSearch(query);
     });
+
+    // Drag and drop events
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        const productId = $(ev.target).closest('.col-md-4').attr('id').replace('product-', '');
+        ev.dataTransfer.setData("productId", productId);
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+        const productId = ev.dataTransfer.getData("productId");
+        const product = getProductById(productId);
+        if (product) {
+            addToCart(product);
+            productCounter(JSON.parse(sessionStorage.getItem('products')));
+        }
+    }
+
+    window.allowDrop = allowDrop;
+    window.drag = drag;
+    window.drop = drop;
 });
+
+// Function to get product by ID (simulate fetching from backend or using stored data)
+function getProductById(productId) {
+    const products = JSON.parse(sessionStorage.getItem('products'));
+    return products.find(product => product.art_num === parseInt(productId));
+}
 
 // Function to count the found products to display on home.html
 function productCounter(products) {
@@ -51,9 +81,11 @@ function loadProducts() {
             if (data.error) {
                 console.error(data.error);
             } else {
-                // Displays the products loaded
+                // Store products in session storage
+                sessionStorage.setItem('products', JSON.stringify(data));
+                // Display the products loaded
                 displayProducts(data);
-                console.log("Products loaded, yayaaaah!");
+                console.log("Products loaded successfully!");
             }
         },
         error: function(xhr, status, error) {
@@ -80,7 +112,7 @@ function displayProducts(products) {
 
         // Create the cards with HTML
         const card = $(`
-            <div class="col-md-4 d-flex align-items-stretch">
+            <div id="product-${product.art_num}" class="col-md-4 d-flex align-items-stretch" draggable="true" ondragstart="drag(event)">
                 <div class="card mb-4">
                     <img src="${product.image_url}" class="card-img-top" alt="${product.name}">
                     <div class="card-body d-flex flex-column">
@@ -93,12 +125,12 @@ function displayProducts(products) {
                 </div>
             </div>
         `);
-        
+
         // Add the card to the row
         row.append(card);
     });
 
-    // If the system exited the function without appending the last row, it will be appended here
+    // If there's a remaining row that hasn't been added
     if (row !== null) {
         productContainer.append(row);
     }
@@ -107,8 +139,9 @@ function displayProducts(products) {
     $('.add-to-cart-btn').on('click', function() {
         const product = JSON.parse($(this).attr('data-product'));
         addToCart(product);
+        productCounter(JSON.parse(sessionStorage.getItem('products')));
     });
 
-    // Send displayed products to product counter
+    // Update product counter
     productCounter(products);
 }
