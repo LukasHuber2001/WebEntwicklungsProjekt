@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 18. Jun 2024 um 22:38
--- Server-Version: 10.4.28-MariaDB
--- PHP-Version: 8.2.4
+-- Erstellungszeit: 19. Jun 2024 um 11:15
+-- Server-Version: 10.4.32-MariaDB
+-- PHP-Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -104,8 +104,6 @@ CREATE TABLE `receipt` (
 --
 
 INSERT INTO `receipt` (`id`, `datum`, `user_id`, `total`, `ort`, `land`, `plz`, `adresse`) VALUES
-(18, '2024-06-18 22:11:29', 20, 250.00, 'Wien', 'AT', '1200', 'Leithastraße 25'),
-(19, '2024-06-18 22:12:49', 20, 579.92, 'Wien', 'AT', '1200', 'Leithastraße 25'),
 (20, '2024-06-18 22:13:51', 20, 372.95, 'Wien', 'AT', '1200', 'Leithastraße 25'),
 (21, '2024-06-18 22:14:13', 20, 321.96, 'Wien', 'AT', '1200', 'Leithastraße 25');
 
