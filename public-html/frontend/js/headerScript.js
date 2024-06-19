@@ -11,14 +11,14 @@ $(document).ready(function() {
         document.getElementById("registration-link").style.display = "none";
         document.getElementById("profil-link").style.display = "block";
         document.getElementById("logout-link").style.display = "block";
-        document.getElementById("dashboard-link").style.display = "none";
+        
     } else {
         document.getElementById("lbl-welcome").innerHTML = "You are currently not logged in!";
         document.getElementById("login-link").style.display = "block";
         document.getElementById("registration-link").style.display = "block";
         document.getElementById("profil-link").style.display = "none";
         document.getElementById("logout-link").style.display = "none";
-        document.getElementById("dashboard-link").style.display = "none";
+        
     }
     
     // Logout functionality
