@@ -4,7 +4,6 @@ $(document).ready(function() {
 
     let username = getCookie('username');
     
-    let isAdmin = getCookie('admin');
 
     if (username) {
         document.getElementById("lbl-welcome").innerHTML = "Welcome, " + username + "!";
@@ -21,9 +20,7 @@ $(document).ready(function() {
         document.getElementById("logout-link").style.display = "none";
         document.getElementById("dashboard-link").style.display = "none";
     }
-    if(isAdmin == 1){
-        document.getElementById("dashboard-link").style.display = "block";
-    }
+    
     // Logout functionality
     document.getElementById("logout-link").addEventListener("click", function () {
         if (confirm("Are you sure you want to Logout?")) {
